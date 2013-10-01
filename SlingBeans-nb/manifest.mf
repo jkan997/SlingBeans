@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.jkan997.slingbeans
+OpenIDE-Module-Localizing-Bundle: org/jkan997/slingbeans/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+
