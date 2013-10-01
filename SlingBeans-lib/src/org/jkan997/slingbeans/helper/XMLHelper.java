@@ -1,7 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * SlingBeans - NetBeans Sling plugin
+ * https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license
+ * http://www.apache.org/licenses/LICENSE-2.0
  */
+
 package org.jkan997.slingbeans.helper;
 
 import com.thoughtworks.xstream.XStream;
@@ -13,7 +16,7 @@ import org.jkan997.slingbeans.sync.SyncEntry;
 
 /**
  *
- * @author jakaniew
+ * @author jkan997
  */
 public class XMLHelper {
 
