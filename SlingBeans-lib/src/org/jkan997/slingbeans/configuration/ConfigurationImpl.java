@@ -21,8 +21,8 @@ import java.util.Map;
  */
 public class ConfigurationImpl implements Configuration {
 
-    private static ConfigurationImpl instance = null;
-    private String settingsDir = null;
+    public static ConfigurationImpl instance = null;
+    public String settingsDir = null;
 
     public static synchronized Configuration getInstance() {
         if (instance == null) {

@@ -9,7 +9,6 @@ package org.jkan997.slingbeans.dialogs;
 
 import javax.swing.DefaultComboBoxModel;
 import org.jkan997.slingbeans.helper.PropertyType;
-import org.jkan997.slingbeans.helper.SwingHelper;
 
 
 
@@ -204,7 +203,7 @@ public class NewPropertyDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void propertyTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_propertyTypeComboActionPerformed
-        //valueEditor.setTypeAndValue(propertyTypeCombo.getSelectedItem().toString(), null);
+        valueEditor.setTypeAndValue(propertyTypeCombo.getSelectedItem().toString(), null);
         //SwingHelper.showMessage(propertyTypeCombo.getSelectedItem().toString());
     }//GEN-LAST:event_propertyTypeComboActionPerformed
 

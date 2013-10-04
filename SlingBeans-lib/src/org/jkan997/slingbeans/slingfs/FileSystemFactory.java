@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.slingfs;
 
 import org.jkan997.slingbeans.helper.LogHelper;
@@ -23,7 +20,7 @@ public class FileSystemFactory {
 
     public static String FS_PROTOCOL = "nbfs";
     public static FileSystemFactory instance = null;
-    
+
     public static synchronized FileSystemFactory getInstance() {
         if (instance == null) {
             instance = new FileSystemFactory();
@@ -86,7 +83,7 @@ public class FileSystemFactory {
         }
         return null;
     }
-    
+
     public synchronized FileSystem registerFileSystem(FileSystem fileSystem) {
         String fsId = fileSystem.getFileSystemId();
         System.out.println("FSID " + fsId);
@@ -94,15 +91,25 @@ public class FileSystemFactory {
         return fileSystem;
     }
 
-    private void unregisterAllFilesystems() {
-        String[] fsIds = fileSystemMap.values().toArray(new String[]{});
+    public void unregisterAllFilesystems() {
+        String[] fsIds = new String[]{};
+        try {
+            fsIds = fileSystemMap.values().toArray(new String[]{}); //TODO : Remove this try
+        } catch (Exception ex) {
+        };
         for (String fsId : fsIds) {
             unregisterFileSystem(fsId);
         }
+        fileSystemMap.clear();
     }
 
     public synchronized void unregisterFileSystem(String fileSystemId) {
         if (fileSystemMap.containsKey(fileSystemId)) {
+            FileSystem fs = fileSystemMap.get(fileSystemId);
+            if (fs != null) {
+                LogHelper.logInfo(this, "Unregistering FS %s", fs.toString());
+                fs.dispose();
+            }
             fileSystemMap.remove(fileSystemId);
         }
     }

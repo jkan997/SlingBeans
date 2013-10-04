@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.slingfs;
 
 import java.io.ByteArrayOutputStream;
@@ -24,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +33,17 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.jkan997.slingbeans.entity.WorkflowSet;
+import org.jkan997.slingbeans.helper.Disposable;
 import org.jkan997.slingbeans.helper.PropertyType;
 import org.jkan997.slingbeans.helper.UrlParamEncoder;
 import org.json.ISO8601;
@@ -56,13 +57,14 @@ enum FileSystemServer {
     SLING, CRX
 }
 
-public class FileSystem extends org.openide.filesystems.FileSystem {
+public class FileSystem extends org.openide.filesystems.FileSystem implements Disposable {
 
     public final static Charset UTF_8;
     public final static String TEXT_PLAIN;
     public final static FileObject[] EMPTY_FO_ARR = new FileObject[]{};
     private FileSystemServer server;
     private Map<String, Object> changes = new LinkedHashMap<String, Object>();
+    private Set<Disposable> relatedObjects = new HashSet<Disposable>();
 
     static {
         TEXT_PLAIN = "text/plain";
@@ -316,7 +318,8 @@ public class FileSystem extends org.openide.filesystems.FileSystem {
 
     private synchronized DefaultHttpClient getHttpClient() {
         if (httpClient == null) {
-            httpClient = new DefaultHttpClient();
+            ClientConnectionManager cm = new PoolingClientConnectionManager();
+            httpClient = new DefaultHttpClient(cm);
         }
         return httpClient;
 
@@ -347,8 +350,12 @@ public class FileSystem extends org.openide.filesystems.FileSystem {
         }
         return null;
     }
-
+    
     public byte[] sendGet(String url, Map<String, String> params) {
+        return sendGet(url,params,true);
+    }
+
+    public byte[] sendGet(String url, Map<String, String> params, boolean dumpRequest) {
         if ((!url.startsWith("http://")) && (!url.startsWith("https://"))) {
             url = serverPrefix + (!url.startsWith("/") ? "/" : "") + url;
         }
@@ -367,9 +374,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem {
                 urlSb.append("=");
                 urlSb.append(URLEncoder.encode(me.getValue()));
             }
-            System.out.println(urlSb);
             long timeStamp = System.currentTimeMillis();
-            dumpHttpRequest(urlSb, timeStamp);
+            if (dumpRequest){
+                dumpHttpRequest(urlSb, timeStamp);
+            }
             HttpGet get = new HttpGet(urlSb.toString());
             configureAuth(get);
             HttpResponse response = httpClient.execute(get);
@@ -726,5 +734,19 @@ public class FileSystem extends org.openide.filesystems.FileSystem {
 
     public boolean isCQ5() {
         return this.server == FileSystemServer.CRX;
+    }
+
+    public void addRelatedObject(Disposable obj) {
+        this.relatedObjects.add(obj);
+    }
+
+    public void dispose() {
+        for (Disposable obj : relatedObjects) {
+            try {
+                obj.dispose();
+            } catch (Exception ex) {
+                LogHelper.logError(ex);
+            }
+        }
     }
 }

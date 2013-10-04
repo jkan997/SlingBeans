@@ -1,15 +1,13 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.slingfs;
 
 import org.jkan997.slingbeans.helper.JcrTypeHelper;
 import org.jkan997.slingbeans.helper.PropertyType;
 import java.util.Date;
+import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.json.ISO8601;
 import org.json.JSONObject;
 
@@ -40,7 +38,7 @@ public class FileObjectAttribute {
     public Double getDouble() {
         return (Double) convertedValue;
     }
-    
+
     public Boolean getBoolean() {
         return (Boolean) convertedValue;
     }
@@ -56,10 +54,10 @@ public class FileObjectAttribute {
     public String getTypeName() {
         return PropertyType.nameFromValue(type);
     }
-    
-    public Class getTypeClass(){
+
+    public Class getTypeClass() {
         if (type == PropertyType.DATE) {
-           return Date.class;
+            return Date.class;
         } else if (type == PropertyType.LONG) {
             return Long.class;
         } else if (type == PropertyType.DOUBLE) {
@@ -68,7 +66,7 @@ public class FileObjectAttribute {
             return Boolean.class;
         }
         return String.class;
-         
+
     }
 
     public void setJsonValue(JSONObject jsonObj, String propName) {
@@ -105,7 +103,7 @@ public class FileObjectAttribute {
         if (type == PropertyType.DOUBLE) {
             return getDouble().toString().replace(",", ".");
         } else if (type == PropertyType.BOOLEAN) {
-            return ((Boolean)convertedValue) == true ? "true" : "false";
+            return ((Boolean) convertedValue) == true ? "true" : "false";
         } else if (convertedValue != null) {
             return convertedValue.toString();
         }
@@ -127,8 +125,21 @@ public class FileObjectAttribute {
     public void setModified(boolean modified) {
         this.modified = modified;
     }
-    
-    
+
+    @Override
+    public boolean equals(Object obj) {
+        FileObjectAttribute foa = (FileObjectAttribute) obj;
+        return ((ObjectHelper.equalObjects(foa.getTypeClass(), this.getTypeClass()))
+                && (ObjectHelper.equalObjects(foa.getValue(), this.getValue())));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.convertedValue != null ? this.convertedValue.hashCode() : 0);
+        hash = 67 * hash + this.type;
+        return hash;
+    }
 
     @Override
     public String toString() {
