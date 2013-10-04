@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nblogviewer;
 
 import java.io.BufferedReader;
@@ -17,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import org.jkan997.slingbeans.helper.DisposableTimerTask;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.slingfs.FileSystem;
 import org.openide.windows.IOProvider;
@@ -82,7 +80,7 @@ public class LogViewer {
         this.io = inputIo;
         logWriter = io.getOut();
         timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
+        TimerTask timerTask = new DisposableTimerTask() {
             @Override
             public void run() {
                 if (io.isClosed()) {
@@ -97,6 +95,7 @@ public class LogViewer {
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 1000);
+
         LogHelper.logInfo(this, "Log Timer scheduled");
     }
 
@@ -141,7 +140,7 @@ public class LogViewer {
         if (logName != null) {
             params.put("logFile", logName);
         }
-        byte[] resp = fs.sendGet(url, params);
+        byte[] resp = fs.sendGet(url, params,false);
         InputStream is = new ByteArrayInputStream(resp);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line = null;
@@ -164,5 +163,6 @@ public class LogViewer {
                 }
             }
         }
+        br.close();
     }
 }

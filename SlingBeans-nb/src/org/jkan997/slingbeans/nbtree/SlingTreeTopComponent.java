@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbtree;
 
 import java.beans.PropertyVetoException;
@@ -12,6 +9,7 @@ import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.nbservices.SlingFsConnector;
 import org.jkan997.slingbeans.helper.StringHelper;
 import org.jkan997.slingbeans.slingfs.FileObject;
+import org.jkan997.slingbeans.slingfs.FileSystem;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -49,6 +47,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
     protected FileObject rootFo = null;
     private final ExplorerManager mgr = new ExplorerManager();
     private final InstanceContent content = new InstanceContent();
+    private final SlingRootNode rootNode;
 
     public SlingTreeTopComponent() {
         initComponents();
@@ -58,7 +57,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         pathText.setEnabled(false);
         //pathText.setEditable(false);
         pathText.setText("/");
-        SlingRootNode rootNode = new SlingRootNode(Children.LEAF);
+        rootNode = new SlingRootNode(Children.LEAF);
         BeanTreeView btv = (BeanTreeView) crxScrollPane;
         rootNode.setHidden(true);
         rootNode.setBeanTreeView(btv);
@@ -118,6 +117,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         connectBtn = new javax.swing.JButton();
         refreshBtn = new javax.swing.JButton();
         pathText = new javax.swing.JTextField();
+        disconnectBtn = new javax.swing.JButton();
         crxScrollPane = getBeanTreeView();
 
         pathPanel.setBackground(new java.awt.Color(0, 0, 0));
@@ -149,27 +149,37 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
             }
         });
 
+        org.openide.awt.Mnemonics.setLocalizedText(disconnectBtn, org.openide.util.NbBundle.getMessage(SlingTreeTopComponent.class, "SlingTreeTopComponent.disconnectBtn.text")); // NOI18N
+        disconnectBtn.setMaximumSize(new java.awt.Dimension(75, 20));
+        disconnectBtn.setMinimumSize(new java.awt.Dimension(75, 20));
+        disconnectBtn.setPreferredSize(new java.awt.Dimension(75, 20));
+        disconnectBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disconnectBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pathPanelLayout = new javax.swing.GroupLayout(pathPanel);
         pathPanel.setLayout(pathPanelLayout);
         pathPanelLayout.setHorizontalGroup(
             pathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pathPanelLayout.createSequentialGroup()
-                .addComponent(pathText, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                .addComponent(pathText, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(connectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(connectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(disconnectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(refreshBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        pathPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {connectBtn, refreshBtn});
-
         pathPanelLayout.setVerticalGroup(
             pathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(connectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(refreshBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pathText, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(pathText, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(disconnectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -198,6 +208,13 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
             @Override
             protected void rootNodeHandler(FileObject fo) {
                 rootFo = fo;
+                try {
+                    FileSystem fs = fo.getFileSystem();
+                    rootNode.setName(fs.getDisplayName());
+                } catch (Exception ex) {
+                    LogHelper.logError(ex);
+                }
+
             }
         };
         sfh.connectToFileSystem(null);
@@ -234,9 +251,16 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         }
 
     }//GEN-LAST:event_pathTextKeyPressed
+
+    private void disconnectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectBtnActionPerformed
+        rootFo = null;
+        this.initSlingFs(rootFo);
+
+    }//GEN-LAST:event_disconnectBtnActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton connectBtn;
     private javax.swing.JScrollPane crxScrollPane;
+    private javax.swing.JButton disconnectBtn;
     private javax.swing.JPanel pathPanel;
     private javax.swing.JTextField pathText;
     private javax.swing.JButton refreshBtn;

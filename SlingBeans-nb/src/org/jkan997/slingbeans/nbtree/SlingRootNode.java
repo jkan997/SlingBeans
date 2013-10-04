@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbtree;
 
 import java.awt.Image;
@@ -12,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
-import org.jkan997.slingbeans.nbactions.OpenLogViewerAction;
-import org.jkan997.slingbeans.nbactions.StartWorkflowAction;
-import org.jkan997.slingbeans.nbactions.StartWorkflowWithDialogAction;
 import org.jkan997.slingbeans.nbactions.submenu.CQ5Submenu;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.openide.explorer.view.BeanTreeView;
@@ -31,17 +25,26 @@ public class SlingRootNode extends AbstractNode {
 
     private FileObject rootFileObject = null;
     private BeanTreeView beanTreeView;
-    private StartWorkflowAction startWorkflowAction = null;
     private Action[] actionsArr = null;
-    private OpenLogViewerAction openLogAction;
-    private StartWorkflowWithDialogAction startWorkflowWithDialogAction;
+    private String defaultName = "Sling Repository";
 
     public SlingRootNode(Children children) {
         super(children);
+        setName(defaultName);
     }
 
     public SlingRootNode(Children children, Lookup lookup) {
         super(children, lookup);
+        setName(defaultName);
+    }
+
+    @Override
+    public void setName(String newName) {
+        String oldName = this.getName();
+        super.setName(newName);
+        super.setDisplayName(newName);
+        fireNameChange(oldName, newName);
+        fireDisplayNameChange(oldName,newName);
     }
 
     @Override
@@ -60,11 +63,6 @@ public class SlingRootNode extends AbstractNode {
             actionsArr = actions.toArray(new Action[]{});
         }
         return actionsArr;
-    }
-
-    @Override
-    public String getName() {
-        return "Sling Repository";
     }
 
     @Override
@@ -92,13 +90,11 @@ public class SlingRootNode extends AbstractNode {
     public void setRootFileObject(FileObject rootFileObject) {
         this.rootFileObject = rootFileObject;
     }
-    
-     public void refresh() {
+
+    public void refresh() {
         refresh(true);
     }
 
     public void refresh(boolean expandNodeAfter) {
-      
     }
-
 }

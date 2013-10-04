@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbtree;
 
 import java.awt.Image;
@@ -14,8 +11,12 @@ import org.jkan997.slingbeans.nbactions.OpenEditorAction;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
 import org.jkan997.slingbeans.nbactions.AddNodeAction;
 import org.jkan997.slingbeans.nbactions.AddPropertyAction;
@@ -36,7 +37,6 @@ import org.openide.nodes.Children;
 import org.openide.nodes.Node;
 import org.openide.nodes.NodeTransfer;
 import org.openide.nodes.Sheet;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.Utilities;
 import org.openide.util.datatransfer.PasteType;
@@ -88,17 +88,16 @@ public class SlingNode extends AbstractNode {
             } catch (FileStateInvalidException ex) {
                 LogHelper.logError(ex);
             }
+            AddSubmenu addSubmenu = new AddSubmenu(this);
+            actions.add(addSubmenu);
+            RemoveSubmenu removeSubmenu = new RemoveSubmenu(this);
+            actions.add(removeSubmenu);
             if (isCQ5) {
-                AddSubmenu addSubmenu = new AddSubmenu(this);
-                actions.add(addSubmenu);
-                RemoveSubmenu removeSubmenu = new RemoveSubmenu(this);
-                actions.add(removeSubmenu);
-                
                 CQ5Submenu cq5Submenu = new CQ5Submenu(this);
                 actions.add(cq5Submenu);
-                RefreshAction refreshAction = new RefreshAction(this);
-                actions.add(refreshAction);
             }
+            RefreshAction refreshAction = new RefreshAction(this);
+            actions.add(refreshAction);
 
             actionsArr = actions.toArray(new Action[]{});
         }
@@ -157,8 +156,8 @@ public class SlingNode extends AbstractNode {
         return fileObject;
     }
 
-    public void setFileObject(FileObject fileObject) {
-        this.fileObject = fileObject;
+    public void setFileObject(FileObject fo) {
+        this.fileObject = fo;
     }
 
     public String getPath() {
@@ -174,14 +173,43 @@ public class SlingNode extends AbstractNode {
 
     public void refresh(boolean expandNodeAfter) {
         Node parentNode = this.getParentNode();
-        Children children = parentNode.getChildren();
-        if (children instanceof SlingNodeChildren) {
-            SlingNodeChildren snc = (SlingNodeChildren) children;
-            snc.reload();
-            if (expandNodeAfter) {
-                getRootNode().getBeanTreeView().expandNode(this);
+        Children children = this.getChildren();
+        FileObject fo = this.getFileObject();
+        fo.setChildrenLoaded(false);
+        Map<String, FileObjectAttribute> oldProps = ObjectHelper.cloneMap(fo.getAttributesMap());
+        fo.refresh();
+        Map<String, FileObjectAttribute> newProps = ObjectHelper.cloneMap(fo.getAttributesMap());
+        Set<String> keys = new TreeSet<String>();
+        keys.addAll(oldProps.keySet());
+        keys.addAll(newProps.keySet());
+        for (String key : keys) {
+            FileObjectAttribute oldVal = oldProps.get(key);
+            FileObjectAttribute newVal = newProps.get(key);
+            LogHelper.logInfo(this, "%s = $s [%s]", key, oldVal, newVal);
+            if (!ObjectHelper.equalObjects(oldVal, newVal)) {
+                this.firePropertyChange(key, oldVal, newVal);
+                LogHelper.logInfo(this, "firePropertyChange(%s, %s, %s)", key, oldVal, newVal);
             }
         }
+        if (children instanceof SlingNodeChildren) {
+            if (fo.isLeafNode()) {
+                this.setChildren(Children.LEAF);
+            } else {
+                SlingNodeChildren snc = (SlingNodeChildren) children;
+                snc.reload();
+            }
+
+        } else {
+            if (!fo.isLeafNode()) {
+                SlingNodeChildren snc = new SlingNodeChildren(fo);
+                this.setChildren(snc);
+            }
+
+        }
+        if (expandNodeAfter) {
+            getRootNode().getBeanTreeView().expandNode(this);
+        }
+
 
     }
 

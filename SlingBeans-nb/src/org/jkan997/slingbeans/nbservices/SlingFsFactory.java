@@ -65,6 +65,7 @@ public class SlingFsFactory extends URLMapper {
     }
 
     public void registerFileSystem(FileSystem fileSystem) {
+        fsFactory.unregisterAllFilesystems();
         fsFactory.registerFileSystem(fileSystem);
     }
 
