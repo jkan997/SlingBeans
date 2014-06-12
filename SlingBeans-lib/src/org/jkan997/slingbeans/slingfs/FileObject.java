@@ -102,7 +102,7 @@ public class FileObject extends org.openide.filesystems.FileObject {
 
     @Override
     public void refresh() {
-        fs.getFileObject(this,true);
+        fs.getFileObject(this, true);
     }
 
     @Override
@@ -302,9 +302,17 @@ public class FileObject extends org.openide.filesystems.FileObject {
 
     public void setFileContent(byte[] fileContent) {
         this.fileContent = fileContent;
-        fs.setFileContent(this.path, this.fileContent);
+        fs.setFileContent(this.path, this.fileContent,false);
         objectModified();
     }
+    
+    public void setFileContent(byte[] fileContent, boolean binary) {
+        this.fileContent = fileContent;
+        fs.setFileContent(path, fileContent,binary);
+        objectModified();
+    }
+    
+   
 
     @Override
     public OutputStream getOutputStream(FileLock fl) throws IOException {
@@ -483,11 +491,14 @@ public class FileObject extends org.openide.filesystems.FileObject {
         Map<String, Object> changes = new HashMap<String, Object>();
         for (Map.Entry<String, FileObjectAttribute> me : attributes.entrySet()) {
             foa = me.getValue();
-            if (foa.isModified()) {
+            if (foa.isRemoved()) {
+                String key = "-/" + path + "/" + me.getKey();
+                changes.put(key,null);
+            } else if (foa.isModified()) {
                 String key = path + "/" + me.getKey();
                 changes.put(key, foa.getValue());
-                //changes.put(key+"@TypeHint", "String");
             }
+
         }
         fs.sendPost(changes);
         for (FileObjectAttribute foa2 : attributes.values()) {
@@ -550,8 +561,8 @@ public class FileObject extends org.openide.filesystems.FileObject {
     }
 
     public void objectModified() {
-        syncTimestamp = System.currentTimeMillis();
-        FileEvent fe = new FileEvent(this);
-        this.fireFileChangedEvent(listeners(), fe);
+        //syncTimestamp = System.currentTimeMillis();
+        //FileEvent fe = new FileEvent(this);
+        //this.fireFileChangedEvent(listeners(), fe);
     }
 }

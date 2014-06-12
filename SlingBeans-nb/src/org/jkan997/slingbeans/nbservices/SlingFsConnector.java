@@ -22,6 +22,7 @@ import org.netbeans.api.progress.ProgressUtils;
  */
 public class SlingFsConnector implements FileSystemConnector {
 
+    @Override
     public FileSystem connectToFileSystem(String fsId) {
         FileSystem fs = null;
         if (fsId != null) {
@@ -41,6 +42,9 @@ public class SlingFsConnector implements FileSystemConnector {
     }
 
     private void initSlingFs(final FileSystem fs) {
+        
+        LogHelper.disableLogs=true;
+        
         final Runnable initSlingFsTask = new Runnable() {
             @Override
             public void run() {

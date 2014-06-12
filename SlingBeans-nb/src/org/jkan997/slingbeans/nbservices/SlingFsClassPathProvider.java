@@ -26,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author jkan997
  */
-@ServiceProvider(service = ClassPathProvider.class)
+//@ServiceProvider(service = ClassPathProvider.class)
 public class SlingFsClassPathProvider implements ClassPathProvider {
 
     private Map<String, ClassPath> classPathMap = new HashMap<String, ClassPath>();

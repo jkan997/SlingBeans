@@ -5,6 +5,8 @@
 package org.jkan997.slingbeans.slingfs;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import org.jkan997.slingbeans.slingfs.types.NodeTypeSet;
 import org.jkan997.slingbeans.helper.Base64;
 import org.jkan997.slingbeans.helper.IOHelper;
@@ -12,8 +14,6 @@ import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.helper.ServerUrl;
 import org.jkan997.slingbeans.helper.ServerUrlParser;
 import org.jkan997.slingbeans.helper.StringHelper;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -33,17 +33,19 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.jkan997.slingbeans.entity.WorkflowSet;
 import org.jkan997.slingbeans.helper.Disposable;
+import org.jkan997.slingbeans.helper.HttpClientHelper;
+import org.jkan997.slingbeans.helper.MimeTypeHelper;
+import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.jkan997.slingbeans.helper.PropertyType;
 import org.jkan997.slingbeans.helper.UrlParamEncoder;
 import org.json.ISO8601;
@@ -103,11 +105,14 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
 
     }
 
-    public void init() {
+    protected final void init() {
+        httpClient = HttpClientHelper.createHttpClient(name, password);
+        LogHelper.logInfo(this, "Credentials %s [%s]", name, password);
         serverPrefix = String.format("%s://%s:%d", protocol, host, port);
         String crxRootUrl = serverPrefix + "/crx/server/crx.default/jcr:root";
         String slingRootUrl = serverPrefix + "/server/default/jcr:root";
         byte[] data = getData(slingRootUrl, ".0.json");
+
         if (data != null) {
             server = FileSystemServer.SLING;
             rootUrl = slingRootUrl;
@@ -316,11 +321,7 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         return ((s.length() < 10000) && (s.indexOf('\n') == -1));
     }
 
-    private synchronized DefaultHttpClient getHttpClient() {
-        if (httpClient == null) {
-            ClientConnectionManager cm = new PoolingClientConnectionManager();
-            httpClient = new DefaultHttpClient(cm);
-        }
+    private DefaultHttpClient getHttpClient() {
         return httpClient;
 
     }
@@ -344,15 +345,16 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
             HttpResponse response = httpClient.execute(post);
             HttpEntity resEntity = response.getEntity();
             byte[] res = getResponseBytes(resEntity, timeStamp);
+            post.releaseConnection();
             return res;
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }
         return null;
     }
-    
+
     public byte[] sendGet(String url, Map<String, String> params) {
-        return sendGet(url,params,true);
+        return sendGet(url, params, true);
     }
 
     public byte[] sendGet(String url, Map<String, String> params, boolean dumpRequest) {
@@ -375,7 +377,7 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
                 urlSb.append(URLEncoder.encode(me.getValue()));
             }
             long timeStamp = System.currentTimeMillis();
-            if (dumpRequest){
+            if (dumpRequest) {
                 dumpHttpRequest(urlSb, timeStamp);
             }
             HttpGet get = new HttpGet(urlSb.toString());
@@ -409,7 +411,7 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
             if ((changes != null) && (!changes.isEmpty())) {
                 boolean first = true;
                 for (Map.Entry<String, Object> me : changes.entrySet()) {
-                    String val = me.getValue().toString();
+                    String val = ObjectHelper.toString(me.getValue(), "");
                     String key = me.getKey();
                     if (first) {
                         first = false;
@@ -457,31 +459,39 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         return null;
     }
 
-    public void setFileContent(String path, byte[] content, boolean create) {
-        FileSystem.setFileContent(path, content, create, changes);
+    public void addFileContentChanges(String path, byte[] content, boolean create) {
+        FileSystem.addFileContentChanges(path, content, create, changes);
     }
 
-    public static void setFileContent(String path, byte[] content, boolean create, Map<String, Object> changes) {
-        path = StringHelper.normalizePath(path);
+    public static void addFileContentChanges(String path, byte[] content, boolean create, Map<String, Object> changes) {
+        addFileContentChanges(path, content,false, create, changes);
+    }
 
-        String contentStr = (content == null ? "" : new String(content));
+    public static void addFileContentChanges(String path, byte[] content, boolean binary, boolean create, Map<String, Object> changes) {
+
+        path = StringHelper.normalizePath(path);
+        Object contentObj = content;
+        if (!binary) {
+            String contentStr = (content == null ? "" : new String(content));
+            contentObj = contentStr;
+        }
         if (!create) {
-            changes.put(path + "/jcr:content/jcr:data", contentStr);
+            changes.put(path + "/jcr:content/jcr:data", contentObj);
         } else {
             changes.put("+/" + path, "{\"jcr:primaryType\":\"nt:file\"}");
             changes.put("+/" + path + "/jcr:content", "{\"jcr:primaryType\":\"nt:resource\"}");
-            changes.put(path + "/jcr:content/jcr:data", contentStr);
-            changes.put(path + "/jcr:content/jcr:mimeType", "application/octet-stream");
+            changes.put(path + "/jcr:content/jcr:data", contentObj);
+            changes.put(path + "/jcr:content/jcr:mimeType", MimeTypeHelper.BINARY);
             changes.put(path + "/jcr:content/jcr:encoding", "utf-8");
         }
         changes.put(path + "/jcr:content/jcr:lastModified", new Date());
     }
 
-    public void setFileContent(String path, byte[] content) {
+    public void setFileContent(String path, byte[] content, boolean binary) {
         path = StringHelper.normalizePath(path);
         try {
             Map<String, Object> changes = new HashMap<String, Object>();
-            setFileContent(path, content, false, changes);
+            addFileContentChanges(path, content,binary, false, changes);
             sendPost(changes);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -504,9 +514,9 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         changes.put(key, value);
     }
 
-    public static void createFile(String path, String content, Map<String, Object> changes) {
+    public static void createFile(String path, byte[] content, Map<String, Object> changes) {
         if (content == null) {
-            content = "";
+            content = "".getBytes();
         }
         createNode(path, "nt:file", changes);
         String contentPath = path + "/jcr:content";
@@ -517,12 +527,24 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     public static void createFolder(String path, Map<String, Object> changes) {
         createNode(path, NodeTypeSet.SLING_FOLDER, changes);
     }
+    
+    public void createFile(String path, byte[] content) {
+        path = StringHelper.normalizePath(path);
+        try {
+            Map<String, Object> changes = new LinkedHashMap<String, Object>();
+            createFile(path, content, changes);
+            sendPost(changes);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LogHelper.logError(ex);
+        }
+    }
 
     public void createFile(String path, String content) {
         path = StringHelper.normalizePath(path);
         try {
             Map<String, Object> changes = new LinkedHashMap<String, Object>();
-            createFile(path, "", changes);
+            createFile(path, content.getBytes(), changes);
             sendPost(changes);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -574,7 +596,8 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     private byte[] getData(String serverPart, String urlPart) {
         byte[] res = null;
         try {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
+            DefaultHttpClient httpclient = this.getHttpClient();
+
             String[] urlArr = urlPart.split("/");
             StringBuilder urlSb = new StringBuilder();
             for (String s : urlArr) {
@@ -586,10 +609,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
 
             String url = String.format("%s/%s", serverPart, urlSb.toString());
             //LogHelper.logInfo(this, url);
-            HttpGet httpget = new HttpGet(url);
-            configureAuth(httpget);
-            LogHelper.logInfo(this, "Executing request %s", httpget.getRequestLine());
-            HttpResponse response = httpclient.execute(httpget);
+            HttpGet get = new HttpGet(url);
+            configureAuth(get);
+            LogHelper.logInfo(this, "Executing request %s", get.getRequestLine());
+            HttpResponse response = httpclient.execute(get);
             int code = response.getStatusLine().getStatusCode();
             LogHelper.logInfo(this, "Status code %d", code);
             if (code == 200) {
@@ -598,6 +621,7 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
                 res = IOHelper.readInputStreamToBytes(is);
                 is.close();
             }
+            get.releaseConnection();
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }
@@ -625,10 +649,24 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     public SystemAction[] getActions() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     private ContentBody generateBody(String key, Object value) throws Exception {
-        String mimeType = TEXT_PLAIN;
-        String contentStr = null;
+        if (value instanceof byte[]){
+            byte[] bytes = (byte[])value;
+            return generateBinaryBody(key,bytes);
+        } else {
+            return generateTextBody(key,value);
+        }
+    }
+    
+    private ContentBody generateBinaryBody(String key, byte[] data){
+        String mimeType = MimeTypeHelper.BINARY;
+        ByteArrayBody res = new ByteArrayBody( data, key) ;
+        return res;
+    }
+
+    private ContentBody generateTextBody(String key, Object value) throws Exception {
+        String mimeType = MimeTypeHelper.TEXT;
         String valStr = value.toString();
         if (value instanceof Date) {
             mimeType = "jcr-value/" + PropertyType.TYPENAME_DATE.toLowerCase();
@@ -739,6 +777,24 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     public void addRelatedObject(Disposable obj) {
         this.relatedObjects.add(obj);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public FileSystemServer getServer() {
+        return server;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+    
+    
 
     public void dispose() {
         for (Disposable obj : relatedObjects) {

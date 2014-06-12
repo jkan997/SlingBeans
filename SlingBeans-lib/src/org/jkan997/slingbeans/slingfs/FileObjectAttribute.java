@@ -19,9 +19,10 @@ public class FileObjectAttribute {
 
     private Object convertedValue;
     private int type = PropertyType.UNDEFINED;
-    private boolean modified;
-    private boolean readOnly;
-    private boolean hidden;
+    private boolean modified = false;
+    private boolean removed = false;
+    private boolean readOnly = false;
+    private boolean hidden = false;
 
     public Object getValue() {
         return convertedValue;
@@ -126,10 +127,18 @@ public class FileObjectAttribute {
         this.modified = modified;
     }
 
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
     @Override
     public boolean equals(Object obj) {
         FileObjectAttribute foa = (FileObjectAttribute) obj;
-        return ((ObjectHelper.equalObjects(foa.getTypeClass(), this.getTypeClass()))
+        return ((foa.getType() == this.getType())
                 && (ObjectHelper.equalObjects(foa.getValue(), this.getValue())));
     }
 

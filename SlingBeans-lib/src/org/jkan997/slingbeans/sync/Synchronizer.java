@@ -214,7 +214,7 @@ public class Synchronizer {
             is.close();
             boolean createNew = (se.getModifiedRemote() <= 0);
             String remotePath = remoteRoot.getPath() + "/" + se.getPath();
-            FileSystem.setFileContent(remotePath, content, createNew, fileRemoteChanges);
+            FileSystem.addFileContentChanges(remotePath, content, createNew, fileRemoteChanges);
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }

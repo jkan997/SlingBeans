@@ -31,4 +31,11 @@ public class ObjectHelper {
         }
         return res;
     }
+
+    public static String toString(Object value, String defValue) {
+        if (value == null) {
+            return defValue;
+        }
+        return value.toString();
+    }
 }

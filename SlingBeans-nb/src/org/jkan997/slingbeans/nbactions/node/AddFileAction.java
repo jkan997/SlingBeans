@@ -5,13 +5,14 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-package org.jkan997.slingbeans.nbactions;
+package org.jkan997.slingbeans.nbactions.node;
 
 import java.awt.event.ActionEvent;
 import java.util.Map;
 import org.jkan997.slingbeans.dialogs.NewNodeDialog;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
+import org.jkan997.slingbeans.nbactions.AbstractAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileSystem;

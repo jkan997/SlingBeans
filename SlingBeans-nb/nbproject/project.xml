@@ -180,12 +180,8 @@
                 <binary-origin>release/modules/ext/SlingBeansLib.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/swingx-all-1.6.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/swingx-all-1.6.4.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/httpclient-4.2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/httpclient-4.2.1.jar</binary-origin>
+                <runtime-relative-path>ext/commons-io-2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-io-2.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/AbsoluteLayout.jar</runtime-relative-path>
@@ -194,6 +190,26 @@
             <class-path-extension>
                 <runtime-relative-path>ext/httpclient-cache-4.2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/httpclient-cache-4.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/httpmime-4.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/httpmime-4.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/glazedlists_java15.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/glazedlists_java15.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/xstream-1.4.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/xstream-1.4.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/swingx-all-1.6.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/swingx-all-1.6.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/httpclient-4.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/httpclient-4.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/commons-codec-1.6.jar</runtime-relative-path>
@@ -206,14 +222,6 @@
             <class-path-extension>
                 <runtime-relative-path>ext/httpcore-4.2.1.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/httpcore-4.2.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/glazedlists_java15.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/glazedlists_java15.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
-                <runtime-relative-path>ext/httpmime-4.2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/httpmime-4.2.1.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

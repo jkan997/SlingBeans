@@ -1,43 +1,27 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.dialogs;
 
 import javax.swing.DefaultComboBoxModel;
-import org.jkan997.slingbeans.helper.PropertyType;
-import org.jkan997.slingbeans.helper.SwingHelper;
-
-
 
 public class RemovePropertyDialog extends javax.swing.JDialog {
 
-    private boolean createProperty = false;
-    
-    private String[] types = new String[]{
-        PropertyType.TYPENAME_STRING,
-        PropertyType.TYPENAME_BOOLEAN,
-        PropertyType.TYPENAME_LONG,
-        PropertyType.TYPENAME_DOUBLE,
-        PropertyType.TYPENAME_DATE
-    };
+    private boolean removeProperty;
 
     public RemovePropertyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        propertyTypeCombo.setModel(new DefaultComboBoxModel(types));
         propertyTypeCombo.setSelectedIndex(0);
-      //  valueEditor.setTypeAndValue(propertyTypeCombo.getSelectedItem().toString(), null);
     }
 
     public void init() {
-    
     }
-    
-    
+
+    public void setProperties(String[] props) {
+        propertyTypeCombo.setModel(new DefaultComboBoxModel(props));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,7 +34,7 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         cancelBtn = new javax.swing.JButton();
-        addBtn = new javax.swing.JButton();
+        removeBtn = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         propertyTypeCombo = new javax.swing.JComboBox();
@@ -65,10 +49,10 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
             }
         });
 
-        addBtn.setText(org.openide.util.NbBundle.getMessage(RemovePropertyDialog.class, "RemovePropertyDialog.addBtn.text")); // NOI18N
-        addBtn.addActionListener(new java.awt.event.ActionListener() {
+        removeBtn.setText(org.openide.util.NbBundle.getMessage(RemovePropertyDialog.class, "RemovePropertyDialog.removeBtn.text")); // NOI18N
+        removeBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBtnActionPerformed(evt);
+                removeBtnActionPerformed(evt);
             }
         });
 
@@ -87,11 +71,11 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cancelBtn)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(addBtn)
+                .add(removeBtn)
                 .addContainerGap())
         );
 
-        jPanel1Layout.linkSize(new java.awt.Component[] {addBtn, cancelBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        jPanel1Layout.linkSize(new java.awt.Component[] {cancelBtn, removeBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -101,7 +85,7 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
                     .add(errorLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(addBtn)
+                            .add(removeBtn)
                             .add(cancelBtn))
                         .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -133,8 +117,8 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
                     .add(layout.createSequentialGroup()
                         .add(jLabel5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(propertyTypeCombo, 0, 253, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .add(propertyTypeCombo, 0, 213, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -151,40 +135,33 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void propertyTypeComboPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_propertyTypeComboPropertyChange
-            //propertyNameText.setText();
     }//GEN-LAST:event_propertyTypeComboPropertyChange
 
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-      
-    }//GEN-LAST:event_addBtnActionPerformed
+    private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
+        this.removeProperty = true;
+        this.setVisible(false);
+    }//GEN-LAST:event_removeBtnActionPerformed
 
     private void propertyTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_propertyTypeComboActionPerformed
-        //valueEditor.setTypeAndValue(propertyTypeCombo.getSelectedItem().toString(), null);
-        //SwingHelper.showMessage(propertyTypeCombo.getSelectedItem().toString());
     }//GEN-LAST:event_propertyTypeComboActionPerformed
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed
 
-    public boolean isCreateProperty() {
-        return createProperty;
-    }
-
-  
-    
-    public String getPropertyType(){
+    public String getProperty() {
         return propertyTypeCombo.getSelectedItem().toString();
     }
-    
 
-    
+    public boolean isRemoveProperty() {
+        return removeProperty;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addBtn;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JComboBox propertyTypeCombo;
+    private javax.swing.JButton removeBtn;
     // End of variables declaration//GEN-END:variables
 }

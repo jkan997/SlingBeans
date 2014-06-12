@@ -5,11 +5,12 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-package org.jkan997.slingbeans.nbactions;
+package org.jkan997.slingbeans.nbactions.property;
 
 import java.awt.event.ActionEvent;
 import org.jkan997.slingbeans.dialogs.NewPropertyDialog;
 import org.jkan997.slingbeans.helper.SwingHelper;
+import org.jkan997.slingbeans.nbactions.AbstractAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 
 
@@ -28,6 +29,7 @@ public class AddPropertyAction extends AbstractAction {
         SwingHelper.showDialog(npd);
         if (npd.isCreateProperty()){
             node.setProperty(npd.getPropertyName(), npd.getPropertyValue());
+            node.refresh();
         }
     }
 }

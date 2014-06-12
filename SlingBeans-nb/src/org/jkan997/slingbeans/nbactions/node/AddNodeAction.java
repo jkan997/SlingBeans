@@ -1,16 +1,14 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
-package org.jkan997.slingbeans.nbactions;
+package org.jkan997.slingbeans.nbactions.node;
 
 import java.awt.event.ActionEvent;
 import org.jkan997.slingbeans.dialogs.NewNodeDialog;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
+import org.jkan997.slingbeans.nbactions.AbstractAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileSystem;
@@ -34,8 +32,6 @@ public class AddNodeAction extends AbstractAction {
     public void setLockSelection(boolean lockSelection) {
         this.lockSelection = lockSelection;
     }
-
-  
 
     public String getInitialSelection() {
         return initialSelection;
@@ -63,8 +59,8 @@ public class AddNodeAction extends AbstractAction {
                 FileObject parentFo = node.getFileObject();
                 String selectedNodeType = npd.getSelectedNodeType();
                 String selectedNodeName = npd.getSelectedNodeName();
-                if (selectedNodeType.equals(NodeTypeSet.NT_FILE)){
-                    fs.createFile("/"+parentFo.getPath()+"/"+selectedNodeName,"alfa!");
+                if (selectedNodeType.equals(NodeTypeSet.NT_FILE)) {
+                    fs.createFile("/" + parentFo.getPath() + "/" + selectedNodeName, "");
                 } else {
                     parentFo.createNode(selectedNodeName, selectedNodeType);
                 }

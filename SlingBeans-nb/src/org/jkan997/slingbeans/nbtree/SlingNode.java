@@ -9,6 +9,7 @@ import java.awt.datatransfer.Transferable;
 import java.io.IOException;
 import org.jkan997.slingbeans.nbactions.OpenEditorAction;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +19,18 @@ import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
-import org.jkan997.slingbeans.nbactions.AddNodeAction;
-import org.jkan997.slingbeans.nbactions.AddPropertyAction;
+import org.jkan997.slingbeans.nbactions.node.AddNodeAction;
+import org.jkan997.slingbeans.nbactions.property.AddPropertyAction;
 import org.jkan997.slingbeans.nbactions.BuildBundleAction;
-import org.jkan997.slingbeans.nbactions.RefreshAction;
+import org.jkan997.slingbeans.nbactions.node.RefreshAction;
 import org.jkan997.slingbeans.nbactions.ReplicateAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowWithDialogAction;
+import org.jkan997.slingbeans.nbactions.VLTAction;
+import org.jkan997.slingbeans.nbactions.node.RemoveNodeAction;
+import org.jkan997.slingbeans.nbactions.property.RemovePropertyAction;
 import org.jkan997.slingbeans.nbactions.submenu.AddSubmenu;
 import org.jkan997.slingbeans.nbactions.submenu.CQ5Submenu;
-import org.jkan997.slingbeans.nbactions.submenu.RemoveSubmenu;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileObjectAttribute;
 import org.openide.awt.Actions;
@@ -90,11 +93,23 @@ public class SlingNode extends AbstractNode {
             }
             AddSubmenu addSubmenu = new AddSubmenu(this);
             actions.add(addSubmenu);
-            RemoveSubmenu removeSubmenu = new RemoveSubmenu(this);
-            actions.add(removeSubmenu);
+            /*RemoveSubmenu removeSubmenu = new RemoveSubmenu(this);
+             actions.add(removeSubmenu);*/
+
+            RemoveNodeAction removeNodeAction = new RemoveNodeAction(this);
+            actions.add(removeNodeAction);
+
+            AddPropertyAction addPropertyAction = new AddPropertyAction(this);
+            actions.add(addPropertyAction);
+
+            RemovePropertyAction removePropertyAction = new RemovePropertyAction(this);
+            actions.add(removePropertyAction);
+
             if (isCQ5) {
                 CQ5Submenu cq5Submenu = new CQ5Submenu(this);
                 actions.add(cq5Submenu);
+                VLTAction vltAction = new VLTAction(this);
+                actions.add(vltAction);
             }
             RefreshAction refreshAction = new RefreshAction(this);
             actions.add(refreshAction);
@@ -115,22 +130,31 @@ public class SlingNode extends AbstractNode {
          this.children.add(new Node[]{sn});*/
     }
 
-    @Override
-    protected Sheet createSheet() {
-        Sheet sheet = Sheet.createDefault();
-        Sheet.Set props = sheet.get(Sheet.PROPERTIES);
-        for (String key : fileObject.getAttributesMap().keySet()) {
-            FileObjectAttribute foa = fileObject.getAttribute(key);
-            if (!foa.isHidden()) {
-                SlingNodeProperty prop = new SlingNodeProperty(foa.getTypeClass());
-                prop.setName(key);
-                prop.setFileObject(fileObject);
-                prop.setAttrName(key);
+    private SlingNodeProperty createSlingNodeProperty(String key, FileObjectAttribute foa) {
+        SlingNodeProperty prop = new SlingNodeProperty(foa.getTypeClass());
+        prop.setName(key);
+        prop.setFileObject(fileObject);
+        prop.setAttrName(key);
+        return prop;
+    }
 
+    private void updateUpdatePropertySheet(Sheet.Set props) {
+        if (props == null) {
+            return;
+        }
+        List<String> attrNames = Collections.list(props.attributeNames());
+        for (String attrName : attrNames) {
+            props.remove(attrName);
+        }
+        Map<String, FileObjectAttribute> attrsMap = fileObject.getAttributesMap();
+        for (String key : attrsMap.keySet()) {
+            FileObjectAttribute foa = attrsMap.get(key);
+            if (!foa.isHidden()) {
+                SlingNodeProperty prop = createSlingNodeProperty(key, foa);
+                //   prop.
                 props.put(prop);
             }
         }
-
         SlingNodeProperty createdProp = new SlingNodeProperty(Date.class);
         createdProp.setName("Created");
         createdProp.setSpecialAttr(SlingNodeProperty.ATTR_CREATED, fileObject.getCreated());
@@ -146,8 +170,14 @@ public class SlingNode extends AbstractNode {
             sizeProp.setName("Size");
             sizeProp.setSpecialAttr(SlingNodeProperty.ATTR_SIZE, fileObject.getSize());
             props.put(sizeProp);
-
         }
+    }
+
+    @Override
+    protected Sheet createSheet() {
+        Sheet sheet = Sheet.createDefault();
+        Sheet.Set props = sheet.get(Sheet.PROPERTIES);
+        updateUpdatePropertySheet(props);
         oldSheet = sheet;
         return sheet;
     }
@@ -185,11 +215,16 @@ public class SlingNode extends AbstractNode {
         for (String key : keys) {
             FileObjectAttribute oldVal = oldProps.get(key);
             FileObjectAttribute newVal = newProps.get(key);
-            LogHelper.logInfo(this, "%s = $s [%s]", key, oldVal, newVal);
+            LogHelper.logInfo(this, "%s = %s [%s]", key, oldVal, newVal);
+
             if (!ObjectHelper.equalObjects(oldVal, newVal)) {
                 this.firePropertyChange(key, oldVal, newVal);
                 LogHelper.logInfo(this, "firePropertyChange(%s, %s, %s)", key, oldVal, newVal);
             }
+        }
+        if (oldSheet != null) {
+            Sheet.Set props = oldSheet.get(Sheet.PROPERTIES);
+            updateUpdatePropertySheet(props);
         }
         if (children instanceof SlingNodeChildren) {
             if (fo.isLeafNode()) {
@@ -207,7 +242,8 @@ public class SlingNode extends AbstractNode {
 
         }
         if (expandNodeAfter) {
-            getRootNode().getBeanTreeView().expandNode(this);
+            /*
+             getRootNode().getBeanTreeView().expandNode(this);*/
         }
 
 

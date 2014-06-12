@@ -5,9 +5,10 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-package org.jkan997.slingbeans.nbactions;
+package org.jkan997.slingbeans.nbactions.node;
 
 import java.awt.event.ActionEvent;
+import org.jkan997.slingbeans.nbactions.AbstractAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 
 

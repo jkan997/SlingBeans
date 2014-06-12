@@ -9,8 +9,8 @@ package org.jkan997.slingbeans.nbactions.submenu;
 
 import java.util.ArrayList;
 import org.jkan997.slingbeans.nbactions.AbstractAction;
-import org.jkan997.slingbeans.nbactions.AddNodeAction;
-import org.jkan997.slingbeans.nbactions.AddPropertyAction;
+import org.jkan997.slingbeans.nbactions.node.AddNodeAction;
+import org.jkan997.slingbeans.nbactions.property.AddPropertyAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.jkan997.slingbeans.slingfs.types.NodeTypeSet;
 
@@ -21,30 +21,28 @@ import org.jkan997.slingbeans.slingfs.types.NodeTypeSet;
 public class AddSubmenu extends AbstractSubmenu {
 
     public AddSubmenu(SlingNode node) {
-        setActionName("Add");
+        setActionName("Add node");
         actions = new ArrayList<AbstractAction>();
         AddNodeAction addNodeAction = new AddNodeAction(node);
-        addNodeAction.setActionName("Add node...");
+        addNodeAction.setActionName("Unstructured...");
         addAction(addNodeAction);
 
         AddNodeAction addFileAction = new AddNodeAction(node);
-        addFileAction.setActionName("Add file...");
+        addFileAction.setActionName("File...");
         addFileAction.setInitialSelection(NodeTypeSet.NT_FILE);
         addAction(addFileAction);
 
         AddNodeAction addFolderAction = new AddNodeAction(node);
-        addFolderAction.setActionName("Add folder...");
+        addFolderAction.setActionName("Folder...");
         addFolderAction.setInitialSelection(NodeTypeSet.NT_FOLDER);
         addAction(addFolderAction);
 
         AddNodeAction addSlingFolderAction = new AddNodeAction(node);
-        addSlingFolderAction.setActionName("Add Sling folder...");
+        addSlingFolderAction.setActionName("Sling Folder...");
         addSlingFolderAction.setInitialSelection(NodeTypeSet.SLING_FOLDER);
         addAction(addSlingFolderAction);
 
 
-        AddPropertyAction addPropertyAction = new AddPropertyAction(node);
-        addAction(addPropertyAction);
 
     }
 
