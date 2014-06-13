@@ -11,7 +11,7 @@ package org.jkan997.slingbeans.dialogs;
 import java.awt.Color;
 import org.jkan997.slingbeans.sync.SyncMode;
 import org.jkan997.slingbeans.sync.Synchronizer;
-import org.jkan997.slingbeans.test.SyncEntryTableModel;
+import org.jkan997.slingbeans.sync.SyncEntryTableModel;
 
 /**
  *
