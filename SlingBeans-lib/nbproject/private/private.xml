@@ -5,6 +5,10 @@
         <group name="AdobeDemo"/>
         <group/>
         <group name="NBSling"/>
-        <group name="SlingBeans"/>
+        <group name="SlingBeans">
+            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/cli/SlingBeansCli.java</file>
+            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/VLTHelper.java</file>
+            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/UrlParamEncoder.java</file>
+        </group>
     </open-files>
 </project-private>
