@@ -123,6 +123,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         pathPanel.setBackground(new java.awt.Color(0, 0, 0));
 
         org.openide.awt.Mnemonics.setLocalizedText(connectBtn, org.openide.util.NbBundle.getMessage(SlingTreeTopComponent.class, "SlingTreeTopComponent.connectBtn.text")); // NOI18N
+        connectBtn.setMargin(new java.awt.Insets(2, 0, 2, 0));
         connectBtn.setMaximumSize(new java.awt.Dimension(75, 20));
         connectBtn.setMinimumSize(new java.awt.Dimension(75, 20));
         connectBtn.setPreferredSize(new java.awt.Dimension(75, 20));
@@ -133,6 +134,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(refreshBtn, org.openide.util.NbBundle.getMessage(SlingTreeTopComponent.class, "SlingTreeTopComponent.refreshBtn.text")); // NOI18N
+        refreshBtn.setMargin(new java.awt.Insets(2, 0, 2, 0));
         refreshBtn.setMaximumSize(new java.awt.Dimension(75, 20));
         refreshBtn.setMinimumSize(new java.awt.Dimension(75, 20));
         refreshBtn.setPreferredSize(new java.awt.Dimension(75, 20));
@@ -150,6 +152,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         });
 
         org.openide.awt.Mnemonics.setLocalizedText(disconnectBtn, org.openide.util.NbBundle.getMessage(SlingTreeTopComponent.class, "SlingTreeTopComponent.disconnectBtn.text")); // NOI18N
+        disconnectBtn.setMargin(new java.awt.Insets(2, 0, 2, 0));
         disconnectBtn.setMaximumSize(new java.awt.Dimension(75, 20));
         disconnectBtn.setMinimumSize(new java.awt.Dimension(75, 20));
         disconnectBtn.setPreferredSize(new java.awt.Dimension(75, 20));
@@ -164,7 +167,8 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         pathPanelLayout.setHorizontalGroup(
             pathPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pathPanelLayout.createSequentialGroup()
-                .addComponent(pathText, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(pathText, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

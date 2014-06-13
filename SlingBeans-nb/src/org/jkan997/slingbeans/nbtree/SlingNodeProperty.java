@@ -54,7 +54,9 @@ public class SlingNodeProperty extends Node.Property {
         }
         if (attributesMap.containsKey(this.attrName)) {
             FileObjectAttribute foa = attributesMap.get(this.attrName);
+            if (foa!=null){
             return foa.getValue();
+            }
         }
         return null;
     }

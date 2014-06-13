@@ -39,7 +39,10 @@ public class SlingHostDialog extends javax.swing.JDialog {
         this.loginText.setText("admin");
         this.passwdText.setText("admin");
         String defaultHost = "http://localhost:4502/";
-        hosts = (Set<Host>) configuration.getObject(Configuration.HOSTS);
+        Set<Host> configurationHosts = (Set<Host>) configuration.getObject(Configuration.HOSTS);
+        if (configurationHosts!=null){
+            hosts=configurationHosts;
+        }
         hostComboBoxSet = new ComboBoxSet(hosts) {
             @Override
             protected String convertToString(Object o) {
