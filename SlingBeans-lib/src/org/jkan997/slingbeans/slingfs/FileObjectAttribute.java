@@ -1,12 +1,13 @@
 /**
- * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
 package org.jkan997.slingbeans.slingfs;
 
 import org.jkan997.slingbeans.helper.JcrTypeHelper;
 import org.jkan997.slingbeans.helper.PropertyType;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.json.ISO8601;
 import org.json.JSONObject;
@@ -17,12 +18,31 @@ import org.json.JSONObject;
  */
 public class FileObjectAttribute {
 
+    public final static Set<String> readOnlyProps = new TreeSet<String>();
+
+    static {
+        readOnlyProps.add("jcr:created");
+        readOnlyProps.add("jcr:createdBy");
+        readOnlyProps.add("jcr:primaryType");
+        readOnlyProps.add("jcr:mixinTypes");
+    }
+
     private Object convertedValue;
+    private String propertyName;
     private int type = PropertyType.UNDEFINED;
     private boolean modified = false;
     private boolean removed = false;
     private boolean readOnly = false;
     private boolean hidden = false;
+
+    public FileObjectAttribute() {
+    }
+
+    public FileObjectAttribute(String propertyName, Object value, int type) {
+        this.propertyName = propertyName;
+        this.convertedValue = value;
+        this.type = type;
+    }
 
     public Object getValue() {
         return convertedValue;
@@ -71,13 +91,15 @@ public class FileObjectAttribute {
     }
 
     public void setJsonValue(JSONObject jsonObj, String propName) {
+        propertyName = propName;
         Object value = jsonObj.get(propName);
         String name = jsonObj.getString(":" + propName);
         type = JcrTypeHelper.getType(name, value);
-        readOnly = false;
+        this.readOnly = readOnlyProps.contains(propertyName);
         hidden = (propName.startsWith(":"));
         if (type == PropertyType.DATE) {
             convertedValue = ISO8601.parseToDate(value.toString());
+            this.readOnly = true;
         } else if (type == PropertyType.LONG) {
             convertedValue = ((Number) value).longValue();
         } else if (type == PropertyType.DOUBLE) {
@@ -88,6 +110,57 @@ public class FileObjectAttribute {
             convertedValue = (String) value;
         } else if (value != null) {
             convertedValue = value.toString();
+            readOnly = true;
+        } else {
+            convertedValue = "null";
+            readOnly = true;
+        }
+    }
+
+    public String getXmlValue() {
+        String res = null;
+        if (convertedValue != null) {
+            res = convertedValue.toString();
+            if (type == PropertyType.DATE) {
+                //convertedValue = ISO8601.
+            } else if (type == PropertyType.DOUBLE) {
+                res = "{Double}" + convertedValue.toString();
+            } else if (type == PropertyType.LONG) {
+                res = "{Long}" + convertedValue.toString();
+            } else if (type == PropertyType.BOOLEAN) {
+                res = "{Boolean}" + convertedValue.toString();
+            }
+        }
+        return res;
+    }
+
+    public void setXmlValue(String value, String propName) {
+        if (readOnlyProps.contains(propName)) {
+            this.readOnly = true;
+        }
+        propertyName = propName;
+        int type = PropertyType.STRING;
+        if (value.startsWith("{")) {
+            int ind = value.indexOf("}");
+            if (ind > 0) {
+                String typeStr = value.substring(1, ind);
+                value = value.substring(ind + 1);
+                type = PropertyType.valueFromName(typeStr);
+            }
+        }
+        if (type == PropertyType.DATE) {
+            convertedValue = ISO8601.parseToDate(value.toString());
+            readOnly = true;
+        } else if (type == PropertyType.LONG) {
+            convertedValue = Long.parseLong(value);
+        } else if (type == PropertyType.DOUBLE) {
+            convertedValue = Double.parseDouble(value);
+        } else if (type == PropertyType.BOOLEAN) {
+            convertedValue = "true".equalsIgnoreCase(value);
+        } else if (type == PropertyType.STRING) {
+            convertedValue = value;
+        } else if (value != null) {
+            convertedValue = value;
             readOnly = true;
         } else {
             convertedValue = "null";
@@ -111,12 +184,20 @@ public class FileObjectAttribute {
         return null;
     }
 
+    public String getPropertyName() {
+        return propertyName;
+    }
+
     public boolean isModified() {
         return modified;
     }
 
     public boolean isReadOnly() {
         return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     public boolean isHidden() {
@@ -154,4 +235,5 @@ public class FileObjectAttribute {
     public String toString() {
         return "FileObjectAttribute{" + "value=" + convertedValue + ", type=" + type + '}';
     }
+
 }

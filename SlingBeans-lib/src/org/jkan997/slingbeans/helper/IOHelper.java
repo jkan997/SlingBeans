@@ -1,10 +1,6 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.helper;
 
 import java.io.*;
@@ -32,6 +28,15 @@ public class IOHelper {
         return readReaderToString(new InputStreamReader(is));
     }
 
+    public static byte[] readFileToBytes(File f) throws IOException {
+        int fLen = (int)f.length();
+        byte[] res = new byte[fLen];
+        FileInputStream fis = new FileInputStream(f);
+        fis.read(res);
+        fis.close();
+        return res;
+    }
+
     public static void readInputStreamToOutputStream(InputStream is, OutputStream os) throws IOException {
         byte[] buf = new byte[1024];
         int count;
@@ -39,8 +44,6 @@ public class IOHelper {
             os.write(buf, 0, count);
         }
     }
-    
-    
 
     public static byte[] readInputStreamToBytes(InputStream is) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -65,8 +68,8 @@ public class IOHelper {
             writer.write(buf, 0, count);
         }
     }
-    
-    public static void writeBytesToFile(byte[] bytes, String fileName){
+
+    public static void writeBytesToFile(byte[] bytes, String fileName) {
         try {
             FileOutputStream fos = new FileOutputStream(fileName);
             fos.write(bytes);
@@ -74,5 +77,18 @@ public class IOHelper {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static boolean fileExists(String path) {
+        try {
+            File f = new File(path);
+            if (f.exists()) {
+                return true;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+
     }
 }

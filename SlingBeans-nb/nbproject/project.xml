@@ -61,6 +61,33 @@
                     </run-dependency>
                 </dependency>
                 <dependency>
+                    <code-name-base>org.netbeans.modules.projectapi</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.57.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.netbeans.modules.projectuiapi</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>1</release-version>
+                        <specification-version>1.76.1.8</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
+                    <code-name-base>org.netbeans.modules.server</code-name-base>
+                    <build-prerequisite/>
+                    <compile-dependency/>
+                    <run-dependency>
+                        <release-version>0-1</release-version>
+                        <specification-version>1.28.1</specification-version>
+                    </run-dependency>
+                </dependency>
+                <dependency>
                     <code-name-base>org.netbeans.modules.settings</code-name-base>
                     <build-prerequisite/>
                     <compile-dependency/>
@@ -180,12 +207,12 @@
                 <binary-origin>release/modules/ext/SlingBeansLib.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/commons-io-2.4.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/commons-io-2.4.jar</binary-origin>
+                <runtime-relative-path>ext/jackrabbit-jcr-commons-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-jcr-commons-2.7.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/AbsoluteLayout.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/AbsoluteLayout.jar</binary-origin>
+                <runtime-relative-path>ext/commons-io-2.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-io-2.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/httpclient-cache-4.2.1.jar</runtime-relative-path>
@@ -196,8 +223,12 @@
                 <binary-origin>release/modules/ext/httpmime-4.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/glazedlists_java15.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/glazedlists_java15.jar</binary-origin>
+                <runtime-relative-path>ext/slf4j-simple-1.7.7.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/slf4j-simple-1.7.7.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/slf4j-api-1.7.7.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/slf4j-api-1.7.7.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/xstream-1.4.4.jar</runtime-relative-path>
@@ -208,20 +239,72 @@
                 <binary-origin>release/modules/ext/swingx-all-1.6.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/httpclient-4.2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/httpclient-4.2.1.jar</binary-origin>
-            </class-path-extension>
-            <class-path-extension>
                 <runtime-relative-path>ext/commons-codec-1.6.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/commons-codec-1.6.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/httpcore-4.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/httpcore-4.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jackrabbit-webdav-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-webdav-2.7.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jackrabbit-jcr2spi-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-jcr2spi-2.7.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jackrabbit-spi2dav-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-spi2dav-2.7.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/vault-davex-3.1.7-SNAPSHOT.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/vault-davex-3.1.7-SNAPSHOT.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jcr-2.0.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jcr-2.0.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/AbsoluteLayout.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/AbsoluteLayout.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jackrabbit-spi-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-spi-2.7.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/org.apache.jackrabbit.vault-3.1.7-SNAPSHOT.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/org.apache.jackrabbit.vault-3.1.7-SNAPSHOT.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/glazedlists_java15.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/glazedlists_java15.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-httpclient-3.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-httpclient-3.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/commons-collections-3.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/commons-collections-3.2.1.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/jackrabbit-jcr-client-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-jcr-client-2.7.4.jar</binary-origin>
+            </class-path-extension>
+            <class-path-extension>
+                <runtime-relative-path>ext/httpclient-4.2.1.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/httpclient-4.2.1.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
                 <runtime-relative-path>ext/swing-layout-1.0.4.jar</runtime-relative-path>
                 <binary-origin>release/modules/ext/swing-layout-1.0.4.jar</binary-origin>
             </class-path-extension>
             <class-path-extension>
-                <runtime-relative-path>ext/httpcore-4.2.1.jar</runtime-relative-path>
-                <binary-origin>release/modules/ext/httpcore-4.2.1.jar</binary-origin>
+                <runtime-relative-path>ext/jackrabbit-spi-commons-2.7.4.jar</runtime-relative-path>
+                <binary-origin>release/modules/ext/jackrabbit-spi-commons-2.7.4.jar</binary-origin>
             </class-path-extension>
         </data>
     </configuration>

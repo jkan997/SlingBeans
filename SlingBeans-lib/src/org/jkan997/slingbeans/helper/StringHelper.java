@@ -69,11 +69,22 @@ public class StringHelper {
         }
         return new String[]{name, ext};
     }
+    
 
     public static String normalizePath(String path) {
+       return normalizePath(path,false);
+    }
+
+    public static String normalizePath(String path, boolean absolute) {
         path = path.trim();
         if (path.startsWith("/")) {
-            path = path.substring(1);
+            if (!absolute){
+                path = path.substring(1);
+            }
+        } else {
+            if (absolute){
+                path = "/"+path;
+            }
         }
         if (path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);

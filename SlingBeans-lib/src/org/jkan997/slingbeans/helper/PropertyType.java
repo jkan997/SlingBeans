@@ -18,6 +18,15 @@ package org.jkan997.slingbeans.helper;
  */
 public final class PropertyType {
 
+    
+    
+    public static String[] TYPES = new String[]{
+        PropertyType.TYPENAME_STRING,
+        PropertyType.TYPENAME_BOOLEAN,
+        PropertyType.TYPENAME_LONG,
+        PropertyType.TYPENAME_DOUBLE,
+        PropertyType.TYPENAME_DATE
+    };
     /*
      * The supported property types.
      */
@@ -270,8 +279,8 @@ public final class PropertyType {
         } else if (name.equals(TYPENAME_UNDEFINED)) {
             return UNDEFINED;
         } else {
-            throw new IllegalArgumentException("unknown type: " + name);
         }
+        return -1;
     }
 
     /**

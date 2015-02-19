@@ -1,19 +1,18 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbactions;
 
 import java.awt.event.ActionEvent;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import static javax.swing.Action.NAME;
+import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileSystem;
+import org.netbeans.api.progress.ProgressUtils;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionRegistration;
 
@@ -26,13 +25,23 @@ public class ReplicateAction extends AbstractAction {
     private SlingNode node;
 
     public ReplicateAction(SlingNode node) {
-        setActionName( "Replicate");
+        setActionName("Replicate");
         this.node = node;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        replicateNode();
+        final Runnable loadWorkflowsTask = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    replicateNode();
+                } catch (Exception ex) {
+                    LogHelper.logError(ex);
+                }
+            }
+        };
+        ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, "Replicating node", new AtomicBoolean(false), false);
     }
 
     private void replicateNode() {

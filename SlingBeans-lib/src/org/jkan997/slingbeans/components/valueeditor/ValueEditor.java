@@ -15,6 +15,8 @@ public interface ValueEditor {
 
     public void init();
     
+    public void hideBorders();
+    
     public boolean isValidValue();
 
     public Object getValue();

@@ -16,18 +16,11 @@ public class NewPropertyDialog extends javax.swing.JDialog {
 
     private boolean createProperty = false;
     
-    private String[] types = new String[]{
-        PropertyType.TYPENAME_STRING,
-        PropertyType.TYPENAME_BOOLEAN,
-        PropertyType.TYPENAME_LONG,
-        PropertyType.TYPENAME_DOUBLE,
-        PropertyType.TYPENAME_DATE
-    };
 
     public NewPropertyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        propertyTypeCombo.setModel(new DefaultComboBoxModel(types));
+        propertyTypeCombo.setModel(new DefaultComboBoxModel(PropertyType.TYPES));
         propertyTypeCombo.setSelectedIndex(0);
         valueEditor.setTypeAndValue(propertyTypeCombo.getSelectedItem().toString(), "value");
     }

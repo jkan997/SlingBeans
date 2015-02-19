@@ -5,10 +5,12 @@
         <group name="AdobeDemo"/>
         <group/>
         <group name="NBSling"/>
+        <group name="PhotosMap"/>
+        <group name="MAC"/>
+        <group name="NAVY DAM"/>
         <group name="SlingBeans">
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/cli/SlingBeansCli.java</file>
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/VLTHelper.java</file>
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/UrlParamEncoder.java</file>
+            <file>file:/Users/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/slingfs/local/LocalFileObject.java</file>
+            <file>file:/Users/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/slingfs/local/LocalFileSystem.java</file>
         </group>
     </open-files>
 </project-private>

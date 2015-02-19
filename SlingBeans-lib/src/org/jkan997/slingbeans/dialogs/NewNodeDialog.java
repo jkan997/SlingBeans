@@ -9,9 +9,10 @@ package org.jkan997.slingbeans.dialogs;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import java.io.File;
 import java.util.Set;
+import javax.swing.JFileChooser;
 import org.jkan997.slingbeans.helper.ComboBoxSet;
-import org.jkan997.slingbeans.slingfs.types.NodeType;
 
 /**
  *
@@ -79,8 +80,11 @@ public class NewNodeDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        cancelBtn = new javax.swing.JButton();
         createBtn = new javax.swing.JButton();
+        cancelBtn = new javax.swing.JButton();
+        fileText = new javax.swing.JTextField();
+        fileLabel = new javax.swing.JLabel();
+        browseBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.title")); // NOI18N
@@ -88,17 +92,26 @@ public class NewNodeDialog extends javax.swing.JDialog {
         nodeNameText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.nodeNameText.text")); // NOI18N
 
         nodeTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        nodeTypeCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nodeTypeComboActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.jLabel1.text")); // NOI18N
 
         jLabel2.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.jLabel2.text")); // NOI18N
 
-        cancelBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.cancelBtn.text")); // NOI18N
-        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelBtnActionPerformed(evt);
-            }
-        });
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 0, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 16, Short.MAX_VALUE)
+        );
 
         createBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.createBtn.text")); // NOI18N
         createBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -107,47 +120,54 @@ public class NewNodeDialog extends javax.swing.JDialog {
             }
         });
 
-        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(cancelBtn)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(createBtn)
-                .add(0, 0, 0))
-        );
+        cancelBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.cancelBtn.text")); // NOI18N
+        cancelBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBtnActionPerformed(evt);
+            }
+        });
 
-        jPanel1Layout.linkSize(new java.awt.Component[] {cancelBtn, createBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        fileText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileText.text")); // NOI18N
 
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cancelBtn)
-                    .add(createBtn)))
-        );
+        fileLabel.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileLabel.text")); // NOI18N
+
+        browseBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.browseBtn.text")); // NOI18N
+        browseBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseBtnActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
+                    .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(fileLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, nodeTypeCombo, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 89, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(0, 0, Short.MAX_VALUE)
+                                .add(cancelBtn))
+                            .add(fileText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 197, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(nodeNameText)
-                            .add(nodeTypeCombo, 0, 253, Short.MAX_VALUE)))
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(browseBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                            .add(createBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(nodeNameText))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(new java.awt.Component[] {cancelBtn, createBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
@@ -159,7 +179,17 @@ public class NewNodeDialog extends javax.swing.JDialog {
                     .add(nodeTypeCombo, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel1))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(fileText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(fileLabel)
+                        .add(browseBtn)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(cancelBtn)
+                    .add(createBtn))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -174,9 +204,35 @@ public class NewNodeDialog extends javax.swing.JDialog {
         this.setVisible(false);
 
     }//GEN-LAST:event_createBtnActionPerformed
+
+    private void nodeTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nodeTypeComboActionPerformed
+        
+    }//GEN-LAST:event_nodeTypeComboActionPerformed
+
+    private final JFileChooser fc = new JFileChooser();
+    private  File selectedFile;
+
+    public File getSelectedFile() {
+        return selectedFile;
+    }
+    
+    
+    
+    private void browseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseBtnActionPerformed
+        fc.showOpenDialog(this);
+        selectedFile = fc.getSelectedFile();
+        if (selectedFile!=null){
+            fileText.setText(selectedFile.getAbsolutePath());
+            nodeNameText.setText(selectedFile.getName());
+        }
+    }//GEN-LAST:event_browseBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton browseBtn;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JButton createBtn;
+    private javax.swing.JLabel fileLabel;
+    private javax.swing.JTextField fileText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

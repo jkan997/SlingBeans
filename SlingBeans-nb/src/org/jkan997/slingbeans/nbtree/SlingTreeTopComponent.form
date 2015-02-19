@@ -55,7 +55,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="disconnectBtn" min="-2" pref="19" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="refreshBtn" min="-2" pref="18" max="-2" attributes="0"/>
+                  <Component id="gotoBtn" min="-2" pref="18" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -64,7 +64,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="connectBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="refreshBtn" alignment="3" max="32767" attributes="0"/>
+                  <Component id="gotoBtn" alignment="3" max="32767" attributes="0"/>
                   <Component id="pathText" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                   <Component id="disconnectBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -94,10 +94,13 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="connectBtnActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="refreshBtn">
+        <Component class="javax.swing.JButton" name="gotoBtn">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="org/jkan997/slingbeans/nbtree/Bundle.properties" key="SlingTreeTopComponent.refreshBtn.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="org/jkan997/slingbeans/nbtree/Bundle.properties" key="SlingTreeTopComponent.gotoBtn.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
+              <ResourceString bundle="org/jkan997/slingbeans/nbtree/Bundle.properties" key="SlingTreeTopComponent.gotoBtn.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 0, 2, 0]"/>
@@ -113,7 +116,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refreshBtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gotoBtnActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="pathText">

@@ -1,6 +1,5 @@
 /**
- * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
 package org.jkan997.slingbeans.slingfs;
 
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -24,7 +24,6 @@ import java.util.Objects;
 import org.jkan997.slingbeans.slingfs.types.NodeType;
 import org.jkan997.slingbeans.slingfs.types.NodeTypeSet;
 import org.openide.filesystems.FileChangeListener;
-import org.openide.filesystems.FileEvent;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileStateInvalidException;
 import org.openide.util.Enumerations;
@@ -33,7 +32,17 @@ import org.openide.util.Enumerations;
  *
  * @author jkan997
  */
-public class FileObject extends org.openide.filesystems.FileObject {
+public class FileObject extends org.openide.filesystems.FileObject implements SlingFileObject {
+
+    @Override
+    public Map<String, FileObjectAttribute> getAttributesMap() {
+        return attributes;
+    }
+
+    @Override
+    public String getLocalFilePath() {
+        return null;
+    }
 
     class FileObjectOutputStream2 extends ByteArrayOutputStream {
 
@@ -52,9 +61,44 @@ public class FileObject extends org.openide.filesystems.FileObject {
     private byte[] fileContent;
     private FileObject[] children = FileSystem.EMPTY_FO_ARR;
     boolean childrenLoaded = false;
-    private final Map<String, FileObjectAttribute> attributes = new LinkedHashMap<String, FileObjectAttribute>();
     private long syncTimestamp = 0;
     private ListenerList listeners;
+
+    private final Map<String, FileObjectAttribute> attributes = new LinkedHashMap<String, FileObjectAttribute>();
+
+    @Override
+    public void setAttribute(String key, Object value) throws IOException {
+        setAttribute(key, value, 0);
+    }
+
+    @Override
+    public void setAttribute(String key, Object value, int type) throws IOException {
+        LogHelper.logInfo(this, "setAttribute(%s, %s)", key, value);
+        FileObjectAttribute foa = null;
+        if (attributes.containsKey(key)) {
+            foa = attributes.get(key);
+            foa.setValue(value);
+        } else {
+            foa = new FileObjectAttribute(key, value, type);
+            attributes.put(key, foa);
+        }
+        foa.setModified(true);
+    }
+
+    @Override
+    public Enumeration<String> getAttributes() {
+        LogHelper.logInfo(this, "getAttributes()");
+        Enumeration<String> res = Collections.enumeration(this.attributes.keySet());
+        return res;
+    }
+
+    @Override
+    public FileObjectAttribute getAttribute(String key) {
+        FileObjectAttribute res = attributes.get(key);
+        LogHelper.logInfo(this, "getAttribute(%s)", key);
+        return res;
+
+    }
 
     FileObject() {
     }
@@ -92,6 +136,11 @@ public class FileObject extends org.openide.filesystems.FileObject {
     @Override
     public String getPath() {
         return this.path;
+    }
+
+    @Override
+    public String getFilePath() {
+        return getPath();
     }
 
     private String getParentPath() {
@@ -212,35 +261,6 @@ public class FileObject extends org.openide.filesystems.FileObject {
     }
 
     @Override
-    public FileObjectAttribute getAttribute(String key) {
-        FileObjectAttribute res = attributes.get(key);
-        LogHelper.logInfo(this, "getAttribute(%s)", key);
-        return res;
-
-    }
-
-    @Override
-    public void setAttribute(String key, Object value) throws IOException {
-        LogHelper.logInfo(this, "setAttribute(%s, %s)", key, value);
-        FileObjectAttribute foa = null;
-        if (attributes.containsKey(key)) {
-            foa = attributes.get(key);
-        } else {
-            foa = new FileObjectAttribute();
-            attributes.put(key, foa);
-        }
-        foa.setValue(value);
-        foa.setModified(true);
-    }
-
-    @Override
-    public Enumeration<String> getAttributes() {
-        LogHelper.logInfo(this, "getAttributes()");
-        Enumeration<String> res = Collections.enumeration(this.attributes.keySet());
-        return res;
-    }
-
-    @Override
     public final synchronized void addFileChangeListener(FileChangeListener fcl) {
         if (listeners == null) {
             listeners = new ListenerList<FileChangeListener>();
@@ -302,17 +322,15 @@ public class FileObject extends org.openide.filesystems.FileObject {
 
     public void setFileContent(byte[] fileContent) {
         this.fileContent = fileContent;
-        fs.setFileContent(this.path, this.fileContent,false);
+        fs.setFileContent(this.path, this.fileContent, false);
         objectModified();
     }
-    
+
     public void setFileContent(byte[] fileContent, boolean binary) {
         this.fileContent = fileContent;
-        fs.setFileContent(path, fileContent,binary);
+        fs.setFileContent(path, fileContent, binary);
         objectModified();
     }
-    
-   
 
     @Override
     public OutputStream getOutputStream(FileLock fl) throws IOException {
@@ -460,10 +478,6 @@ public class FileObject extends org.openide.filesystems.FileObject {
         return (jcrContent != null);
     }
 
-    public Map<String, FileObjectAttribute> getAttributesMap() {
-        return attributes;
-    }
-
     public boolean isLeafNode() {
         if ((this.childrenLoaded) && (this.children.length == 0)) {
             return true;
@@ -486,6 +500,7 @@ public class FileObject extends org.openide.filesystems.FileObject {
         return null;
     }
 
+    @Override
     public synchronized void saveAttributes() {
         FileObjectAttribute foa = null;
         Map<String, Object> changes = new HashMap<String, Object>();
@@ -493,7 +508,7 @@ public class FileObject extends org.openide.filesystems.FileObject {
             foa = me.getValue();
             if (foa.isRemoved()) {
                 String key = "-/" + path + "/" + me.getKey();
-                changes.put(key,null);
+                changes.put(key, null);
             } else if (foa.isModified()) {
                 String key = path + "/" + me.getKey();
                 changes.put(key, foa.getValue());

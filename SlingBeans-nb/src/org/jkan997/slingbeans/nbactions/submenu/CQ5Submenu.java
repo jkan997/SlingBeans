@@ -33,16 +33,17 @@ public class CQ5Submenu extends AbstractSubmenu {
     }
     
     public CQ5Submenu(AbstractNode node, FileObject fileObject) {
-        setActionName("CQ5");
+        setActionName("AEM");
         actions = new ArrayList<AbstractAction>();
         if (node instanceof SlingNode) {
             SlingNode slingNode = (SlingNode) node;
             fileObject = slingNode.getFileObject();
+            /*
             if (fileObject.getExt().equals("bnd")) {
                 BuildBundleAction buildBundleAction = new BuildBundleAction(null);
                 buildBundleAction.setSlingNode(slingNode);
                 addAction(buildBundleAction);
-            }
+            }*/
             ReplicateAction replicateAction = new ReplicateAction(slingNode);
             OpenCrxDeAction openCrxDeAction = new OpenCrxDeAction(slingNode);
             OpenHtmlAction openHtmlAction = new OpenHtmlAction(slingNode);

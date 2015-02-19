@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbactions;
 
 import java.awt.event.ActionEvent;
@@ -24,14 +21,6 @@ import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataObject;
 import org.openide.util.Utilities;
 
-@ActionID(
-        category = "SlingFs",
-        id = "org.jkan997.slingbeans.nbactions.submenu.ProjectSubmenu")
-@ActionRegistration(
-        displayName = "Sling")
-@ActionReferences({
-    @ActionReference(path = "Loaders/folder/any/Actions", position = 111)
-})
 public class SynchronizeAction extends AbstractAction {
 
     protected final DataObject context;
@@ -41,7 +30,7 @@ public class SynchronizeAction extends AbstractAction {
     public SynchronizeAction(DataObject context) {
         this.setActionName("Synchronize fast");
         this.context = context;
-        
+
     }
 
     @Override

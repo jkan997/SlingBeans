@@ -43,7 +43,7 @@ public class SlingFsConnector implements FileSystemConnector {
 
     private void initSlingFs(final FileSystem fs) {
         
-        LogHelper.disableLogs=true;
+        LogHelper.disableLogs=false;
         
         final Runnable initSlingFsTask = new Runnable() {
             @Override

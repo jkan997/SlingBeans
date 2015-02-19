@@ -7,7 +7,10 @@
 
 package org.jkan997.slingbeans.components.valueeditor;
 
+import java.awt.BasicStroke;
+import java.awt.Insets;
 import javax.swing.JTextField;
+import javax.swing.border.StrokeBorder;
 
 /**
  *
@@ -17,6 +20,12 @@ public class StringValueEditor extends JTextField implements ValueEditor {
 
     public StringValueEditor(String text) {
         setValue(text);
+        this.setMargin(new Insets(0,0,0,0));
+    }
+    
+    @Override
+    public void hideBorders(){
+        this.setBorder(new StrokeBorder(new BasicStroke(1)));
     }
 
     @Override

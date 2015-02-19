@@ -5,10 +5,9 @@
         <group name="AdobeDemo"/>
         <group/>
         <group name="NBSling"/>
-        <group name="SlingBeans">
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbactions/submenu/AddSubmenu.java</file>
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbactions/submenu/ProjectSubmenu.java</file>
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbactions/submenu/AbstractSubmenu.java</file>
-        </group>
+        <group name="PhotosMap"/>
+        <group name="MAC"/>
+        <group name="NAVY DAM"/>
+        <group name="SlingBeans"/>
     </open-files>
 </project-private>

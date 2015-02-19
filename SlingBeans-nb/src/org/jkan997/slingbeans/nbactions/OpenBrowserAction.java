@@ -1,10 +1,6 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.nbactions;
 
 import java.awt.Desktop;
@@ -42,13 +38,11 @@ public class OpenBrowserAction extends AbstractAction {
             StringBuilder urlSb = new StringBuilder(fileObject.getFileSystem().getServerPrefix());
             if (openBrowserMode == OPEN_BROWSER_MODE_CRXDE) {
                 urlSb.append("/crx/de/index.jsp#/" + fileObject.getPath());
-            }
-            if (openBrowserMode == OPEN_BROWSER_MODE_WF_CONSOLE) {
+            } else if (openBrowserMode == OPEN_BROWSER_MODE_WF_CONSOLE) {
                 urlSb.append("/workflow");
             } else {
                 urlSb.append("/" + fileObject.getPath() + ".html");
             }
-            //URL url = new URL(urlStr);
             Desktop desktop = Desktop.getDesktop();
             desktop.browse(new URI(urlSb.toString()));
         } catch (Exception ex) {

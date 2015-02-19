@@ -1,0 +1,19 @@
+<result success='true' apiversion='12'>  
+    <executions count='1'>    
+        <execution id='949' href='http://localhost:4440/execution/follow/949' status='running' project='AdobeDemo_Windows'>      
+            <user>admin</user>      
+            <date-started unixtime='1421405491143'>2015-01-16T10:51:31Z</date-started>      
+            <job id='7dbf42e5-09f1-4e50-b549-7f19f2f396ec'>        
+                <name>#STOP APACHE</name>        
+                <group></group>        
+                <project>AdobeDemo_Windows</project>        
+                <description></description>        
+                <options>          
+                    <option name='nodename' value='236' />        
+                </options>      
+            </job>      
+            <description>net stop Apache2.2</description>      
+            <argstring>-nodename 236</argstring>    
+        </execution>  
+    </executions>
+</result>

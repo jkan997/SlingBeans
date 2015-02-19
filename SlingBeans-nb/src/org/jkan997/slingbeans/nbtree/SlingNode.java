@@ -26,7 +26,6 @@ import org.jkan997.slingbeans.nbactions.node.RefreshAction;
 import org.jkan997.slingbeans.nbactions.ReplicateAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowWithDialogAction;
-import org.jkan997.slingbeans.nbactions.VLTAction;
 import org.jkan997.slingbeans.nbactions.node.RemoveNodeAction;
 import org.jkan997.slingbeans.nbactions.property.RemovePropertyAction;
 import org.jkan997.slingbeans.nbactions.submenu.AddSubmenu;
@@ -99,20 +98,18 @@ public class SlingNode extends AbstractNode {
             RemoveNodeAction removeNodeAction = new RemoveNodeAction(this);
             actions.add(removeNodeAction);
 
+            if (isCQ5) {
+                CQ5Submenu cq5Submenu = new CQ5Submenu(this);
+                actions.add(cq5Submenu);
+            }
+            RefreshAction refreshAction = new RefreshAction(this);
+            actions.add(refreshAction);
+
             AddPropertyAction addPropertyAction = new AddPropertyAction(this);
             actions.add(addPropertyAction);
 
             RemovePropertyAction removePropertyAction = new RemovePropertyAction(this);
             actions.add(removePropertyAction);
-
-            if (isCQ5) {
-                CQ5Submenu cq5Submenu = new CQ5Submenu(this);
-                actions.add(cq5Submenu);
-                VLTAction vltAction = new VLTAction(this);
-                actions.add(vltAction);
-            }
-            RefreshAction refreshAction = new RefreshAction(this);
-            actions.add(refreshAction);
 
             actionsArr = actions.toArray(new Action[]{});
         }
@@ -245,7 +242,6 @@ public class SlingNode extends AbstractNode {
             /*
              getRootNode().getBeanTreeView().expandNode(this);*/
         }
-
 
     }
 

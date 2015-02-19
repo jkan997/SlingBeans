@@ -38,9 +38,9 @@ public class OpenEditorAction extends AbstractAction {
         setActionName("Open in editor...");
         this.node = node;
     }
-
+/*
     private synchronized void registerClasspath() throws MalformedURLException {
-        if (1 == 2) {
+        if (1 == 1) {
             return;
         }
         // if (!cpRegistrated.contains("cq5")){
@@ -52,10 +52,10 @@ public class OpenEditorAction extends AbstractAction {
                 try {
                     URL url = FileUtil.urlForArchiveOrDir(cq5lib);
                     urls.add(url);
-                    /*  if (classpathSb.length()>0){
+                     if (classpathSb.length()>0){
                      classpathSb.append(File.pathSeparator);
                      }
-                     classpathSb.append(cq5lib.getCanonicalPath());*/
+                     classpathSb.append(cq5lib.getCanonicalPath());
                 } catch (Exception ex) {
                     LogHelper.logError(ex);
                 }
@@ -64,11 +64,10 @@ public class OpenEditorAction extends AbstractAction {
         LogHelper.logInfo(this, classpathSb.toString());
         ClassPath cq5ClassPath = ClassPathSupport.createClassPath(urls.toArray(new URL[]{}));
         GlobalPathRegistry.getDefault().register(ClassPath.COMPILE, new ClassPath[]{cq5ClassPath});
-
         FileObject fo = node.getFileObject();
         FileObject cpParentFo = fo.getClassPathParent();
         LogHelper.logInfo(this, "CP Parent = %s", cpParentFo.getPath());
-        ClassPath classPath = ClassPathSupport.createClassPath(cpParentFo);
+        /*ClassPath classPath = ClassPathSupport.createClassPath(cpParentFo);
         GlobalPathRegistry gpr = GlobalPathRegistry.getDefault();
         gpr.register(ClassPath.SOURCE, new ClassPath[]{classPath});
         final ClassPath sourcePath = ClassPath.getClassPath(fo, ClassPath.SOURCE);
@@ -83,16 +82,13 @@ public class OpenEditorAction extends AbstractAction {
         sb.append("\n\n\n");
         LogHelper.logInfo(this, sb.toString());
 
-    }
+    }*/
 
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
             FileObject fo = node.getFileObject();
-            final ClassPath sourcePath = ClassPath.getClassPath(fo, ClassPath.SOURCE);
-            LogHelper.logInfo("Source path", "%s", sourcePath);
             DataObject d = DataObject.find(fo);
-
             System.out.println("Data object " + d);
             EditorCookie ec = (EditorCookie) d.getCookie(EditorCookie.class);
             if (ec != null) {

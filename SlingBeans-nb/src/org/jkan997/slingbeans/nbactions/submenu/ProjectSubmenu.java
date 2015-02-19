@@ -21,15 +21,16 @@ import org.openide.awt.ActionRegistration;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.util.actions.Presenter;
-
+/*
 @ActionID(
         category = "SlingFs",
-        id = "org.jkan997.slingbeans.nbactions.submenu.ProjectSubmenu")
+        id = "org.jkan997.slingbeans.nbactions.submenu.")
 @ActionRegistration(
         displayName = "Sling sm")
 @ActionReferences({
     @ActionReference(path = "Loaders/folder/any/Actions", position = 111)
 })
+*/
 public class ProjectSubmenu extends AbstractSubmenu implements Presenter.Popup {
 
     protected final DataObject context;
