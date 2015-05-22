@@ -42,12 +42,10 @@ public abstract class VltAction extends AbstractAction {
 
     private void runAction() {
         LogHelper.logInfo(this, "Action %s", this.getClass().getName());
-
         try {
             SlingFsFactory slingFsFactory = SlingFsFactory.lookup();
             String fsId = slingFsFactory.getDefualtFileSystemId();
             if (fsId == null) {
-                
                 SwingHelper.showMessage("Please connect to Sling remote repository");
                 return;
             }
@@ -57,22 +55,33 @@ public abstract class VltAction extends AbstractAction {
             if (fs != null) {
                 VltManager vltManager = fs.getVltManager();
                 LocalSlingRootNode rootNode = this.getRootNode();
-                LocalSlingNode currentNode = this.getLocalSlingNode();
+                String currentNodePath = null;
+                LocalSlingNode currentNode = null;
+                currentNode = this.getLocalSlingNode();
+                boolean isRootNode = false;
+                if (currentNode!=null){
+                currentNodePath = currentNode.getFileObject().getFilePath();
+                }
+                
+                if ((this.node instanceof LocalSlingRootNode)) {
+                    isRootNode = true;
+                }
+                
                 Writer outputWriter = this.getOutputWriter();
                 if (!exportToRemote) {
                     if (currentNode != null) {
                         if (currentNode.getLevel() <= 1) {
                             outputWriter.write(String.format("Refusing to export first level node %s to remote server\n", currentNode.getFilePath()));
                         } else {
-                            LogHelper.logInfo(this, "VltManager import %s, %s", rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
-                            vltManager.importContentToRemote(rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
+                            LogHelper.logInfo(this, "VltManager import %s, %s", rootNode.getContentPath(), currentNodePath);
+                            vltManager.importContentToRemote(rootNode.getContentPath(), currentNodePath);
                             outputWriter.write(String.format("Exported %s to remote server %s\n", currentNode.getFilePath(), fs.toString()));
                         }
                     } else {
                         LogHelper.logInfo(this, "VltManager export current node is null.");
                     }
                 } else {
-                    if (currentNode != null) {
+                    if ((currentNode != null) && (!isRootNode)) {
                         LogHelper.logInfo(this, "VltManager export %s, %s", rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
                         vltManager.exportContentFromRemote(rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
                         outputWriter.write(String.format("Imported %s from remote server %s\n", currentNode.getFilePath(), fs.toString()));

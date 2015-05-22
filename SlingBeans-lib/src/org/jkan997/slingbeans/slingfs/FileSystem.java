@@ -1,5 +1,6 @@
 /**
- * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
 package org.jkan997.slingbeans.slingfs;
 
@@ -433,8 +434,8 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
                         skipVals.add(key);
                         diff.append(key + " : " + val);
                     } else if (key.startsWith("+")) {
-                        diff.append(key + " : \"xxx\"");
-                        //skipVals.add(key);
+                        diff.append(key + " : " + val);
+                        skipVals.add(key);
                     } else {
                         diff.append("^/" + key + " : ");
                     }
@@ -513,6 +514,7 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     public void createNode(String path, String nodeType) {
         FileSystem.createNode(path, nodeType, changes);
     }
+
 
     public static void createNode(String path, String nodeType, Map<String, Object> changes) {
         path = StringHelper.normalizePath(path);

@@ -84,6 +84,7 @@ public class ValueEditorContainer extends JPanel {
     }
 
     public void setTypeAndValue(int type, Object value) {
+        LogHelper.logInfo(this,"Type: "+type+" value "+value);
         this.setLayout(new GridLayout());
         System.out.println(type);
         ValueEditor ve = null;
@@ -109,6 +110,7 @@ public class ValueEditorContainer extends JPanel {
             ve = new LongValueEditor(toLong(value));
         }
         if (ve != null) {
+            LogHelper.logInfo(this,"VE Class: "+ve.getClass().getSimpleName());
             if (this.getComponentCount() > 0) {
                 this.remove(0);
             }
@@ -127,7 +129,7 @@ public class ValueEditorContainer extends JPanel {
             }
             this.setOpaque(true);
             //comp.setSize(400, 50);
-            LogHelper.logInfo(this, "Add component", ve);
+            LogHelper.logInfo(this, "Add component ", ve);
 
             this.add(comp);
             this.ve = ve;

@@ -63,9 +63,10 @@ public final class PropertyEditorTopComponent extends TopComponent {
         TableColumn tc = new TableColumn(0, 200);
         tc.setHeaderValue("Name");
         propertyTable.addColumn(tc);
-        tc = new TableColumn(1, 400);
-        tc.setHeaderValue("Value");
-        propertyTable.addColumn(tc);
+        TableColumn valueTc = new TableColumn(1, 400);
+        valueTc.setHeaderValue("Value");
+        propertyTable.addColumn(valueTc);
+        valueTc.setCellEditor(new PropertyTableCellEditor());
         tc = new TableColumn(2, 20);
         tc.setHeaderValue("Type");
         propertyTable.addColumn(tc);

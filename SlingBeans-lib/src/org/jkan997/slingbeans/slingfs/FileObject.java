@@ -1,5 +1,6 @@
 /**
- * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
 package org.jkan997.slingbeans.slingfs;
 
@@ -420,6 +421,13 @@ public class FileObject extends org.openide.filesystems.FileObject implements Sl
         LogHelper.logInfo(this, "createNode(%s, %s)", name, nodeType);
         String path = this.path + "/" + nodeName;
         fs.createNode(path, nodeType);
+        // fs.commmit();
+    }
+
+    public void createFile(String nodeName, byte[] content) throws IOException {
+        LogHelper.logInfo(this, "createFile(%s, %d)", name, content.length);
+        String path = this.path + "/" + nodeName;
+        fs.createFile(path, content);
         // fs.commmit();
     }
 

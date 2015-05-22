@@ -157,4 +157,6 @@ public class PropertyTableModel extends AbstractTableModel {
             LocalSlingNodeFactory.instance.export(slingFileObject.getFilePath());
         }
     }
+    
+    
 }
