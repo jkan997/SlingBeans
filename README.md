@@ -2,6 +2,9 @@ SlingBeans
 ----------
 SlingBeans is a plugin for NetBeans 8 IDE for AEM and Sling developers.
 
+Please consult [User Manual](https://github.com/jkan997/SlingBeans/wiki/User-manual) for detailed instructions
+
+
 Main features:
 * Remote resource tree directly available in IDE with both attribute, binary content, upload functionalities
 * It is possible to edit local VLT exported tree as original structure (with attributes etc.)
