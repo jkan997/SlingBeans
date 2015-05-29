@@ -1,15 +1,13 @@
 SlingBeans
 ----------
-SlingBeans is a plugin for NetBeans IDE that allows working on remote JCR tree from IDE. Additionally it includes lightweight data synchronization mechanism and remote log tracking.
+SlingBeans is a plugin for NetBeans 8 IDE for AEM and Sling developers.
 
-Sling (JCR) repository browser
-----------
-With SlingBeans you can browse JCR repository from NetBeans IDE. Right now it is possible to create new nodes and adding node properties. There are still some limitations, but we are trying to go over it.
+Please consult [User Manual](https://github.com/jkan997/SlingBeans/wiki/User-manual) for detailed instructions
 
-SlingBeans Sync
-----------
-With SlingBeans Sync you can in very fast and efficient way synchronize local folder with selected remote folder. In case of conflicts user can decide if he prefer to use local or remote version of file.
 
-CQ5 integration
-----------
-In case of discovery on server side Adobe CQ5 SlingBeans exposes some CQ5 centric functions - invoking CQ5 workflows directly from IDE and other. 
+Main features:
+* Remote resource tree directly available in IDE with both attribute, binary content, upload functionalities
+* It is possible to edit local VLT exported tree as original structure (with attributes etc.)
+* It is possible to automatically invoke sync actions (bi-directional based on Apache Vault)
+
+![screen shot 2015-05-23 at 01 37 12](https://cloud.githubusercontent.com/assets/2896358/7781298/6b6fcfea-00ec-11e5-90d2-71ea33f4464d.png)
