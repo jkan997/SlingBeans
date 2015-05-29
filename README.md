@@ -4,7 +4,7 @@ SlingBeans is a plugin for NetBeans 8 IDE for AEM and Sling developers.
 
 Download beta NBM (NetBeans plugin) file for testing [HERE](https://github.com/jkan997/SlingBeans/blob/master/dist/org-jkan997-slingbeans.nbm?raw=true)
 
-* Watch screencast on SlingBeans installation
+* Watch screencast on SlingBeans installation - [HERE](http://youtu.be/uZPBTn3Ho7E)
 * Watch screencast about editing remote AEM repository with SlingBeans - [HERE](https://youtu.be/8X9r-6w2FM4)
 * Watch screencast about editing local Maven AEM Content Project with Synchronization - COMMING SOON
 
