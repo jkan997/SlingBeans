@@ -56,14 +56,24 @@ public class LocalFileObject implements SlingFileObject {
     }
 
     public void addChild(LocalFileObject lfo) {
-        if (!hasChild(name)) {
-            childrenList.add(lfo);
+        if (lfo.name.contains("config")){
+            System.out.println("Ss");
+        }
+        if (!hasChild(lfo.getFullName())) {
             String parentPath = this.getFilePath();
-            if (parentPath.equals("/")) {
-                lfo.setFilePath("/" + lfo.getFullName());
-            } else {
-                lfo.setFilePath(parentPath + "/" + lfo.getFullName());
-            }
+           childrenList.add(lfo);
+           
+            // TODO : Check why this path is null sometimes
+           // if (parentPath != null) 
+           
+                System.out.println(parentPath);
+
+                if (parentPath.equals("/")) {
+                    lfo.setFilePath("/" + lfo.getFullName());
+                } else {
+                    lfo.setFilePath(parentPath + "/" + lfo.getFullName());
+                }
+            
         }
     }
 
@@ -85,6 +95,10 @@ public class LocalFileObject implements SlingFileObject {
     }
 
     public LocalFileObject getOrCreateChild(String name) {
+        if (name.equals("sling")){
+            System.out.println(name);
+        }
+        LogHelper.logInfo(this, " getOrCreateChild %s (current path: %s)",name,this.getFilePath());
         LocalFileObject childFo = getChild(name);
         if (childFo == null) {
             childFo = new LocalFileObject(name, this.fileSystem);

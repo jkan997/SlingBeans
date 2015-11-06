@@ -33,7 +33,7 @@ import org.openide.util.Enumerations;
  *
  * @author jkan997
  */
-public class FileObject extends org.openide.filesystems.FileObject implements SlingFileObject {
+public class FileObject extends org.openide.filesystems.FileObject implements SlingFileObject,Comparable {
 
     @Override
     public Map<String, FileObjectAttribute> getAttributesMap() {
@@ -43,6 +43,12 @@ public class FileObject extends org.openide.filesystems.FileObject implements Sl
     @Override
     public String getLocalFilePath() {
         return null;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        FileObject f2 = (FileObject)o;
+        return this.getName().compareTo(f2.getName());
     }
 
     class FileObjectOutputStream2 extends ByteArrayOutputStream {
@@ -399,7 +405,7 @@ public class FileObject extends org.openide.filesystems.FileObject implements Sl
 
     @Override
     public FileObject createFolder(String s1) throws IOException {
-        LogHelper.logInfo(this, "createFolder(%s, %s)", s1);
+        LogHelper.logInfo(this, "createFolder(%s)", s1);
         return null;
     }
 

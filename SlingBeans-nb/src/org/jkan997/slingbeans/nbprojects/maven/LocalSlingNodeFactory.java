@@ -40,6 +40,7 @@ public class LocalSlingNodeFactory implements NodeFactory {
             contentPath = projectPath + "/src/main/content";
             LogHelper.logInfo(this, "Project content path: " + contentPath);
             if ((new File(contentPath)).exists()) {
+                LogHelper.logInfo(this, "Project content path: exists");
                 LocalFileSystem lfs = new LocalFileSystem();
                 lfs.setContentPath(contentPath);
                 LocalSlingRootNode rootNode = new LocalSlingRootNode(null);

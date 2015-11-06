@@ -49,6 +49,7 @@ import org.jkan997.slingbeans.helper.MimeTypeHelper;
 import org.jkan997.slingbeans.helper.ObjectHelper;
 import org.jkan997.slingbeans.helper.PropertyType;
 import org.jkan997.slingbeans.helper.UrlParamEncoder;
+import org.jkan997.slingbeans.slingfs.types.NodeType;
 import org.jkan997.slingbeans.vlt.VltManager;
 import org.json.ISO8601;
 import org.json.JSONArray;
@@ -87,6 +88,9 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     private WorkflowSet workflows;
     private UsernamePasswordCredentials credentials;
     private VltManager vltManager;
+
+    private String clipboard;
+    private boolean clipboardCopy;
 
     public FileSystem(String url, String user, String password) {
 
@@ -244,6 +248,21 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
                     childFo = loadFileObject(childPath, childJson);
                     childrenList.add(childFo);
                 }
+            }
+            boolean sortChildren = false;
+            if (res.getParent() == null) {
+                sortChildren = true;
+            } else {
+                if (this.nodeTypes != null) {
+                    NodeType nodeType = this.nodeTypes.getByName(res.getPrimaryType());
+                    if ((nodeType != null) && (nodeType.isHasOrderableChildNodes())) {
+                        sortChildren = true;
+                    }
+                }
+            }
+            //sortChildren = false;
+            if (sortChildren) {
+                Collections.sort(childrenList);
             }
         }
 
@@ -514,7 +533,6 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     public void createNode(String path, String nodeType) {
         FileSystem.createNode(path, nodeType, changes);
     }
-
 
     public static void createNode(String path, String nodeType, Map<String, Object> changes) {
         path = StringHelper.normalizePath(path);
@@ -825,4 +843,46 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
             }
         }
     }
+
+    public String getClipboardContent() {
+        return clipboard;
+    }
+
+    public boolean isClipboardCopy() {
+        return clipboardCopy;
+    }
+
+    public void setClipboardContent(String clipboard, boolean clipboardCopy) {
+        this.clipboard = clipboard;
+        this.clipboardCopy = clipboardCopy;
+    }
+
+    private void moveCopyNode(String src, String dest, boolean copy) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(":operation", copy ? "copy" : "move");
+        if (!dest.endsWith("/")){
+            dest = dest + "/";
+        }
+        if (!src.startsWith("/")){
+            src = "/" + src;    
+        }
+        if (!dest.startsWith("/")){
+            dest = "/" + dest;    
+        }
+        params.put(":dest", dest);
+        
+        byte[] data =  this.sendPost(src, null,params);
+        LogHelper.logInfo(this, new String(data));
+    }
+
+    public void moveNode(String src, String dest) {
+        moveCopyNode(src, dest, false);
+
+    }
+
+    public void copyNode(String src, String dest) {
+        moveCopyNode(src, dest, true);
+
+    }
+
 }

@@ -48,6 +48,11 @@ public class OpenLogViewerAction extends AbstractAction {
                     boolean firstLine = true;
                     while ((line = br.readLine()) != null) {
                         line = line.trim();
+                        if (line.contains("No resource found")){
+                            logFiles.clear();
+                            return;
+                        }
+                        
                         if (!firstLine) {
                             logFiles.add(line);
                         } else {

@@ -1,10 +1,7 @@
 /**
- * SlingBeans - NetBeans Sling plugin
- * https://github.com/jkan997/SlingBeans
- * Licensed under Apache 2.0 license
- * http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.dialogs;
 
 import java.awt.GridLayout;
@@ -59,6 +56,12 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
             for (String logFile : logFiles) {
                 createCheckBox(logFile);
             }
+            if (logFiles.size() == 0) {
+                warningLabel.setVisible(true);
+            } else {
+                warningLabel.setVisible(false);
+            }
+
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }
@@ -74,14 +77,28 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        errorLabel = new javax.swing.JLabel();
+        cancelBtn1 = new javax.swing.JButton();
         cancelBtn = new javax.swing.JButton();
         selectBtn = new javax.swing.JButton();
-        errorLabel = new javax.swing.JLabel();
         listScrollPane = new javax.swing.JScrollPane();
         logPanel = new javax.swing.JPanel();
+        warningLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.title")); // NOI18N
+
+        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
+        errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        errorLabel.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.errorLabel.text")); // NOI18N
+        errorLabel.setToolTipText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.errorLabel.toolTipText")); // NOI18N
+
+        cancelBtn1.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.cancelBtn1.text")); // NOI18N
+        cancelBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelBtn1ActionPerformed(evt);
+            }
+        });
 
         cancelBtn.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.cancelBtn.text")); // NOI18N
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -97,22 +114,24 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
             }
         });
 
-        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
-        errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        errorLabel.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.errorLabel.text")); // NOI18N
-        errorLabel.setToolTipText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.errorLabel.toolTipText")); // NOI18N
-
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .add(errorLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(cancelBtn1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 83, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(cancelBtn)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(selectBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(selectBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(errorLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(0, 0, 0))
         );
+
+        jPanel1Layout.linkSize(new java.awt.Component[] {cancelBtn, cancelBtn1, selectBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
@@ -121,32 +140,40 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
                     .add(errorLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(jPanel1Layout.createSequentialGroup()
                         .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(selectBtn)
-                            .add(cancelBtn))
+                            .add(cancelBtn1)
+                            .add(cancelBtn)
+                            .add(selectBtn))
                         .add(0, 0, Short.MAX_VALUE))))
         );
 
         logPanel.setLayout(new java.awt.GridLayout(100, 0));
         listScrollPane.setViewportView(logPanel);
 
+        warningLabel.setForeground(new java.awt.Color(255, 0, 0));
+        warningLabel.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.warningLabel.text")); // NOI18N
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(listScrollPane)
-                        .addContainerGap())))
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(warningLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 279, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(listScrollPane))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(listScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 189, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(listScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(warningLabel)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -155,8 +182,8 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
 
     private void selectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBtnActionPerformed
         selectedLogFiles.clear();
-        for (JCheckBox cb : checkboxes){
-            if (cb.isSelected()){
+        for (JCheckBox cb : checkboxes) {
+            if (cb.isSelected()) {
                 selectedLogFiles.add(cb.getName());
             }
         }
@@ -178,12 +205,19 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_cancelBtnActionPerformed
+
+    private void cancelBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cancelBtn1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelBtn;
+    private javax.swing.JButton cancelBtn1;
     private javax.swing.JLabel errorLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane listScrollPane;
     private javax.swing.JPanel logPanel;
     private javax.swing.JButton selectBtn;
+    private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables
 }

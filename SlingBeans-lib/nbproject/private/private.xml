@@ -8,8 +8,9 @@
         <group name="PhotosMap"/>
         <group name="MAC"/>
         <group name="NAVY DAM"/>
-        <group name="SlingBeans">
-            <file>file:/Volumes/MacData/jakaniew/svn/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/FsTest.java</file>
-        </group>
+        <group name="SlingBeans"/>
+        <group name="VISA"/>
+        <group name="GeoSpatial AEM"/>
+        <group name="MotorolaTraining"/>
     </open-files>
 </project-private>

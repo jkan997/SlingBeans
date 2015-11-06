@@ -28,7 +28,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
     public NewNodeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
+        checkTypeIsFile();
     }
 
     public void setNodeTypes(Set nodeTypes) {
@@ -84,7 +84,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
         cancelBtn = new javax.swing.JButton();
         fileText = new javax.swing.JTextField();
         fileLabel = new javax.swing.JLabel();
-        browseBtn = new javax.swing.JButton();
+        fileBrowseBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.title")); // NOI18N
@@ -127,14 +127,15 @@ public class NewNodeDialog extends javax.swing.JDialog {
             }
         });
 
+        fileText.setEditable(false);
         fileText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileText.text")); // NOI18N
 
         fileLabel.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileLabel.text")); // NOI18N
 
-        browseBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.browseBtn.text")); // NOI18N
-        browseBtn.addActionListener(new java.awt.event.ActionListener() {
+        fileBrowseBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileBrowseBtn.text")); // NOI18N
+        fileBrowseBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseBtnActionPerformed(evt);
+                fileBrowseBtnActionPerformed(evt);
             }
         });
 
@@ -152,22 +153,18 @@ public class NewNodeDialog extends javax.swing.JDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, nodeTypeCombo, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(0, 0, Short.MAX_VALUE)
-                                .add(cancelBtn))
-                            .add(fileText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 197, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(fileText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 185, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                            .add(browseBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                            .add(createBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .add(nodeNameText))
+                        .add(fileBrowseBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(nodeNameText)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                        .add(134, 134, 134)
+                        .add(cancelBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(createBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        layout.linkSize(new java.awt.Component[] {cancelBtn, createBtn}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
@@ -184,12 +181,12 @@ public class NewNodeDialog extends javax.swing.JDialog {
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(fileText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(fileLabel)
-                        .add(browseBtn)))
+                        .add(fileBrowseBtn)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cancelBtn)
-                    .add(createBtn))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(cancelBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(createBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -206,9 +203,20 @@ public class NewNodeDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_createBtnActionPerformed
 
     private void nodeTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nodeTypeComboActionPerformed
-        
+        checkTypeIsFile();
     }//GEN-LAST:event_nodeTypeComboActionPerformed
 
+    
+    private void checkTypeIsFile(){
+        boolean typeIsFile = false;
+        String nodeType = getSelectedNodeType();
+        if ((nodeType!=null)&&("nt:file".equalsIgnoreCase(nodeType))){
+            typeIsFile = true;
+        }
+        fileBrowseBtn.setEnabled(typeIsFile);
+        fileText.setEnabled(typeIsFile);
+        
+    }
     private final JFileChooser fc = new JFileChooser();
     private  File selectedFile;
 
@@ -218,19 +226,19 @@ public class NewNodeDialog extends javax.swing.JDialog {
     
     
     
-    private void browseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseBtnActionPerformed
+    private void fileBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileBrowseBtnActionPerformed
         fc.showOpenDialog(this);
         selectedFile = fc.getSelectedFile();
         if (selectedFile!=null){
             fileText.setText(selectedFile.getAbsolutePath());
             nodeNameText.setText(selectedFile.getName());
         }
-    }//GEN-LAST:event_browseBtnActionPerformed
+    }//GEN-LAST:event_fileBrowseBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton browseBtn;
     private javax.swing.JButton cancelBtn;
     private javax.swing.JButton createBtn;
+    private javax.swing.JButton fileBrowseBtn;
     private javax.swing.JLabel fileLabel;
     private javax.swing.JTextField fileText;
     private javax.swing.JLabel jLabel1;

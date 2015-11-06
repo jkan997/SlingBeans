@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-OpenIDE-Module: org.jkan997.slingbeans
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.jkan997.slingbeans/1
 OpenIDE-Module-Layer: org/jkan997/slingbeans/layer.xml
 OpenIDE-Module-Localizing-Bundle: org/jkan997/slingbeans/Bundle.properties
 OpenIDE-Module-Requires: org.openide.windows.WindowManager

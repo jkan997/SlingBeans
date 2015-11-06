@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.nbactions.submenu.AddSubmenu;
 import org.jkan997.slingbeans.nbactions.submenu.CQ5Submenu;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.openide.explorer.view.BeanTreeView;
@@ -26,7 +27,7 @@ public class SlingRootNode extends AbstractNode {
     private FileObject rootFileObject = null;
     private BeanTreeView beanTreeView;
     private Action[] actionsArr = null;
-    private String defaultName = "Sling Repository";
+    private String defaultName = "Not connected";
 
     public SlingRootNode(Children children) {
         super(children);
@@ -44,7 +45,7 @@ public class SlingRootNode extends AbstractNode {
         super.setName(newName);
         super.setDisplayName(newName);
         fireNameChange(oldName, newName);
-        fireDisplayNameChange(oldName,newName);
+        fireDisplayNameChange(oldName, newName);
     }
 
     @Override
@@ -52,11 +53,12 @@ public class SlingRootNode extends AbstractNode {
 
         if (actionsArr == null) {
             List<Action> actions = new ArrayList<Action>();
+            AddSubmenu addSubmenu = new AddSubmenu(this);
+            actions.add(addSubmenu);
             try {
-                if (rootFileObject.getFileSystem().isCQ5()) {
-                    CQ5Submenu cq5submenu = new CQ5Submenu(this, this.rootFileObject);
-                    actions.add(cq5submenu);
-                }
+                boolean aemMode = (rootFileObject.getFileSystem().isCQ5());
+                CQ5Submenu cq5submenu = new CQ5Submenu(this, this.rootFileObject, aemMode);
+                actions.add(cq5submenu);
             } catch (Exception ex) {
                 LogHelper.logError(ex);
             }

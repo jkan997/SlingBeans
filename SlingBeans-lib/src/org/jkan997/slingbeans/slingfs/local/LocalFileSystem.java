@@ -131,6 +131,9 @@ public class LocalFileSystem {
                 fileName = childFile.getName();
                 fileName = normalizeNameUnderscores(fileName);
                 LocalFileObject childLfo = lfo.getOrCreateChild(fileName);
+               if (childLfo.getFilePath().equals("/apps/apps")){
+                   System.out.println("AAA");
+               }
                 if (childFile.isDirectory()) {
                     childLfo.setIsFolder(true);
                     scanFolder(childFile, childLfo);

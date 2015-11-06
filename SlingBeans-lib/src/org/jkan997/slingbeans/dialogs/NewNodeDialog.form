@@ -27,32 +27,29 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel1" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                   <Component id="fileLabel" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="nodeTypeCombo" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="cancelBtn" linkSize="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="fileText" min="-2" pref="197" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="fileText" min="-2" pref="185" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="browseBtn" pref="0" max="32767" attributes="0"/>
-                          <Component id="createBtn" linkSize="1" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="fileBrowseBtn" max="32767" attributes="0"/>
                   </Group>
                   <Component id="nodeNameText" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
+                      <Component id="cancelBtn" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="createBtn" pref="0" max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jPanel1" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -64,26 +61,26 @@
                   <Component id="nodeNameText" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="nodeTypeCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="fileText" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="fileLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="browseBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fileBrowseBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cancelBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="createBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cancelBtn" alignment="3" max="32767" attributes="0"/>
+                  <Component id="createBtn" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -162,6 +159,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="fileText">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
           <ResourceString bundle="org/jkan997/slingbeans/dialogs/Bundle.properties" key="NewNodeDialog.fileText.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
@@ -174,14 +172,14 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="browseBtn">
+    <Component class="javax.swing.JButton" name="fileBrowseBtn">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="org/jkan997/slingbeans/dialogs/Bundle.properties" key="NewNodeDialog.browseBtn.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+          <ResourceString bundle="org/jkan997/slingbeans/dialogs/Bundle.properties" key="NewNodeDialog.fileBrowseBtn.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseBtnActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fileBrowseBtnActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

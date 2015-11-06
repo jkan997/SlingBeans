@@ -16,6 +16,7 @@ import org.jkan997.slingbeans.helper.SwingHelper;
 import org.jkan997.slingbeans.nbactions.AbstractAction;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingNode;
 import org.jkan997.slingbeans.nbtree.SlingNode;
+import org.jkan997.slingbeans.nbtree.SlingRootNode;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileSystem;
 import org.jkan997.slingbeans.slingfs.types.NodeTypeSet;
@@ -27,6 +28,7 @@ public class AddNodeAction extends AbstractAction {
     private LocalSlingNode localSlingNode;
     private String initialSelection = null;
     private boolean lockSelection = false;
+    private SlingRootNode slingRootNode;
 
     public AddNodeAction(SlingNode node) {
         setActionName("Add node...");
@@ -37,6 +39,9 @@ public class AddNodeAction extends AbstractAction {
         setActionName("Add node...");
         if (node instanceof SlingNode) {
             slingNode = (SlingNode) node;
+        }
+        if (node instanceof SlingRootNode) {
+            slingRootNode = (SlingRootNode) node;
         }
         if (node instanceof LocalSlingNode) {
             localSlingNode = (LocalSlingNode) node;
@@ -77,10 +82,10 @@ public class AddNodeAction extends AbstractAction {
                 String selectedNodeName = npd.getSelectedNodeName();
                 File selectedFile = npd.getSelectedFile();
                 byte[] fileContent = null;
-                if ((selectedFile!=null)&&(selectedFile.exists())){
+                if ((selectedFile != null) && (selectedFile.exists())) {
                     fileContent = IOHelper.readFileToBytes(selectedFile);
                 }
-                createNode(selectedNodeName, selectedNodeType,fileContent);
+                createNode(selectedNodeName, selectedNodeType, fileContent);
             }
 
         } catch (Exception ex) {
@@ -95,7 +100,7 @@ public class AddNodeAction extends AbstractAction {
             FileObject parentFo = slingNode.getFileObject();
             if (selectedNodeType.equals(NodeTypeSet.NT_FILE)) {
                 String newNodePath = "/" + parentFo.getPath() + "/" + selectedNodeName;
-                if (content!=null){
+                if (content != null) {
                     fs.createFile(newNodePath, content);
                 } else {
                     fs.createFile(newNodePath, "");
@@ -107,14 +112,19 @@ public class AddNodeAction extends AbstractAction {
             slingNode.refresh(false);
         }
 
+        if (slingRootNode != null) {
+            //  FileSystem fs = slingRootNode.getFileObject().getFileSystem();
+
+        }
+
     }
 
     private Set getNodeTypes() {
         if (slingNode != null) {
-            try{
-            FileSystem fs = slingNode.getFileObject().getFileSystem();
-            return fs.getNodeTypes();
-            } catch (Exception ex){
+            try {
+                FileSystem fs = slingNode.getFileObject().getFileSystem();
+                return fs.getNodeTypes();
+            } catch (Exception ex) {
                 LogHelper.logError(ex);
             }
         }

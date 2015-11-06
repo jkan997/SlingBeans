@@ -128,7 +128,7 @@ public class ContentChangeListener implements FileChangeListener {
             }
             /*VltManager vltManager = fs.getVltManager();
              vltManager.importContentToRemote(rootNode.getContentPath(),lfo.getFilePath());*/
-            rootNode.refresh();
+            //rootNode.refresh();
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }

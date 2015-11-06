@@ -51,7 +51,7 @@ public class ValueEditorContainer extends JPanel {
     }
 
     public Object getValue() {
-        return ve.getValue();
+        return ve==null?null:ve.getValue();
     }
 
     public int getType() {
@@ -88,6 +88,7 @@ public class ValueEditorContainer extends JPanel {
         this.setLayout(new GridLayout());
         System.out.println(type);
         ValueEditor ve = null;
+        if (type==0) type=PropertyType.STRING;
         if (type == PropertyType.STRING) {
             if (value == null) {
                 value = "";

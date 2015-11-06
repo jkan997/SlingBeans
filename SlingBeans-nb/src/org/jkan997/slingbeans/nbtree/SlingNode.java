@@ -26,6 +26,9 @@ import org.jkan997.slingbeans.nbactions.node.RefreshAction;
 import org.jkan997.slingbeans.nbactions.ReplicateAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowWithDialogAction;
+import org.jkan997.slingbeans.nbactions.clipboard.CopyNodeAction;
+import org.jkan997.slingbeans.nbactions.clipboard.CutNodeAction;
+import org.jkan997.slingbeans.nbactions.clipboard.PasteNodeAction;
 import org.jkan997.slingbeans.nbactions.node.RemoveNodeAction;
 import org.jkan997.slingbeans.nbactions.property.RemovePropertyAction;
 import org.jkan997.slingbeans.nbactions.submenu.AddSubmenu;
@@ -56,6 +59,9 @@ public class SlingNode extends AbstractNode {
     private RefreshAction refreshAction = null;
     private BuildBundleAction buildBundleAction = null;
     private ReplicateAction replicateAction = null;
+    private CopyNodeAction copyNodeAction;
+    private CutNodeAction cutNodeAction;
+    private PasteNodeAction pasteNodeAction;
     private Sheet oldSheet = null;
     private Children children;
     private Action[] actionsArr = null;
@@ -73,6 +79,9 @@ public class SlingNode extends AbstractNode {
         this.children = children;
         openEditorAction = new OpenEditorAction(this);
         refreshAction = new RefreshAction(this);
+        copyNodeAction = new CopyNodeAction(this);
+        cutNodeAction = new CutNodeAction(this);
+        pasteNodeAction = new PasteNodeAction(this);
     }
 
     @Override
@@ -82,14 +91,19 @@ public class SlingNode extends AbstractNode {
             if (fileObject.isSlingFile()) {
                 actions.add(openEditorAction);
             }
-            actions.add(addNodeAction);
-            actions.add(addPropertyAction);
-            boolean isCQ5 = false;
             try {
-                isCQ5 = this.getFileObject().getFileSystem().isCQ5();
+                boolean aemMode = this.getFileObject().getFileSystem().isCQ5();
+                CQ5Submenu cq5Submenu = new CQ5Submenu(this, aemMode);
+                actions.add(cq5Submenu);
             } catch (FileStateInvalidException ex) {
                 LogHelper.logError(ex);
             }
+            actions.add(addNodeAction);
+            actions.add(copyNodeAction);
+            actions.add(cutNodeAction);
+            actions.add(pasteNodeAction);
+            actions.add(addPropertyAction);
+
             AddSubmenu addSubmenu = new AddSubmenu(this);
             actions.add(addSubmenu);
             /*RemoveSubmenu removeSubmenu = new RemoveSubmenu(this);
@@ -98,10 +112,6 @@ public class SlingNode extends AbstractNode {
             RemoveNodeAction removeNodeAction = new RemoveNodeAction(this);
             actions.add(removeNodeAction);
 
-            if (isCQ5) {
-                CQ5Submenu cq5Submenu = new CQ5Submenu(this);
-                actions.add(cq5Submenu);
-            }
             RefreshAction refreshAction = new RefreshAction(this);
             actions.add(refreshAction);
 
@@ -150,10 +160,13 @@ public class SlingNode extends AbstractNode {
                 SlingNodeProperty prop = createSlingNodeProperty(key, foa);
                 //   prop.
                 props.put(prop);
+
             }
         }
-        SlingNodeProperty createdProp = new SlingNodeProperty(Date.class);
-        createdProp.setName("Created");
+        SlingNodeProperty createdProp = new SlingNodeProperty(Date.class
+        );
+        createdProp.setName(
+                "Created");
         createdProp.setSpecialAttr(SlingNodeProperty.ATTR_CREATED, fileObject.getCreated());
         props.put(createdProp);
 
@@ -170,6 +183,7 @@ public class SlingNode extends AbstractNode {
         }
     }
 
+    /*
     @Override
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
@@ -177,7 +191,7 @@ public class SlingNode extends AbstractNode {
         updateUpdatePropertySheet(props);
         oldSheet = sheet;
         return sheet;
-    }
+    }*/
 
     public FileObject getFileObject() {
         return fileObject;
