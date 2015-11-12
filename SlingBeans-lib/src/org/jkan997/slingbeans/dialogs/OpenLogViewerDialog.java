@@ -4,29 +4,36 @@
  */
 package org.jkan997.slingbeans.dialogs;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import org.jkan997.slingbeans.configuration.Configuration;
 import org.jkan997.slingbeans.configuration.ConfigurationImpl;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.helper.RemoteLogInstaller;
 import org.jkan997.slingbeans.slingfs.FileSystem;
+import org.netbeans.api.progress.ProgressUtils;
 
 public class OpenLogViewerDialog extends javax.swing.JDialog {
 
     private boolean logFilesSelected = false;
     private Set<String> selectedLogFiles = null;
+    private List<String> logFiles = null;
     private final static String LOG_FILES = "log-files";
     private List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
+    private FileSystem fs;
 
     public OpenLogViewerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -44,22 +51,98 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
         logPanel.add(cb);
     }
 
-    public void init(Set<String> logFiles) {
+    protected void installRemoteLog() {
+
+        try {
+            RemoteLogInstaller rli = new RemoteLogInstaller(fs);
+            rli.installRemoteLog();
+        } catch (IOException ex) {
+            LogHelper.logError(ex);
+        }
+    }
+
+    public void loadLogFilesInternal() {
+        try {
+            String url = "/bin/remotelog.html";
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("action", "list");
+            byte[] resp = fs.sendGet(url, params);
+            String str = new String(resp);
+            if (!str.contains("<")) {
+                ByteArrayInputStream is = new ByteArrayInputStream(resp);
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = null;
+                boolean firstLine = true;
+                while ((line = br.readLine()) != null) {
+                    line = line.trim();
+                    if (line.contains("No resource found")) {
+                        logFiles.clear();
+                        return;
+                    }
+                    if (!firstLine) {
+                        logFiles.add(line);
+                    } else {
+                        firstLine = false;
+                    }
+                }
+                br.close();
+            }
+
+        } catch (Exception ex) {
+            LogHelper.logError(ex);
+        }
+    }
+
+    public void loadLogFiles(final boolean installRemoteLog) {
+        logFiles = new ArrayList<String>();
+        final Runnable loadLogFilesTask = new Runnable() {
+            @Override
+            public void run() {
+                if (installRemoteLog) {
+                    installRemoteLog();
+                }
+                loadLogFilesInternal();
+                logFilesLoaded();
+            }
+
+        };
+        ProgressUtils.runOffEventDispatchThread(loadLogFilesTask, "Loading log file list", new AtomicBoolean(false), false);
+    }
+
+    public void init(FileSystem fs) {
+        this.fs = fs;
+        loadLogFiles(false);
+    }
+
+    protected void logFilesLoaded() {
         try {
             Configuration configuration = ConfigurationImpl.getInstance();
             selectedLogFiles = (Set<String>) configuration.getObject(LOG_FILES);
             if (selectedLogFiles == null) {
                 selectedLogFiles = new TreeSet<String>();
             }
-            GridLayout gl = (GridLayout) logPanel.getLayout();
-            gl.setRows(logFiles.size());
-            for (String logFile : logFiles) {
-                createCheckBox(logFile);
-            }
-            if (logFiles.size() == 0) {
-                warningLabel.setVisible(true);
+            logPanel.removeAll();
+            if ((logFiles == null) || (logFiles.size() == 0)) {
+                GridLayout gl = (GridLayout) logPanel.getLayout();
+                gl.setRows(1);
+                JButton remoteLogBtn = new JButton();
+                remoteLogBtn.setMaximumSize(new Dimension(200, 50));
+                remoteLogBtn.setText("Install remote log on AEM");
+                logPanel.add(remoteLogBtn);
+                remoteLogBtn.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        loadLogFiles(true);
+                    }
+
+                });
             } else {
-                warningLabel.setVisible(false);
+
+                for (String logFile : logFiles) {
+                    GridLayout gl = (GridLayout) logPanel.getLayout();
+                    gl.setRows(logFiles.size());
+                    createCheckBox(logFile);
+                }
+
             }
 
         } catch (Exception ex) {
@@ -83,7 +166,6 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
         selectBtn = new javax.swing.JButton();
         listScrollPane = new javax.swing.JScrollPane();
         logPanel = new javax.swing.JPanel();
-        warningLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.title")); // NOI18N
@@ -149,9 +231,6 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
         logPanel.setLayout(new java.awt.GridLayout(100, 0));
         listScrollPane.setViewportView(logPanel);
 
-        warningLabel.setForeground(new java.awt.Color(255, 0, 0));
-        warningLabel.setText(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.warningLabel.text")); // NOI18N
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -159,20 +238,14 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
             .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(warningLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 279, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(listScrollPane))
+                .add(listScrollPane)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(listScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(warningLabel)
+                .add(listScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
@@ -218,6 +291,8 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
     private javax.swing.JScrollPane listScrollPane;
     private javax.swing.JPanel logPanel;
     private javax.swing.JButton selectBtn;
-    private javax.swing.JLabel warningLabel;
     // End of variables declaration//GEN-END:variables
+
+    private void showInstallRemoteLog() {
+    }
 }

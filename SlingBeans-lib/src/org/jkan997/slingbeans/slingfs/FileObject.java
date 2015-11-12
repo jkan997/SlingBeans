@@ -424,7 +424,7 @@ public class FileObject extends org.openide.filesystems.FileObject implements Sl
     }
 
     public void createNode(String nodeName, String nodeType) throws IOException {
-        LogHelper.logInfo(this, "createNode(%s, %s)", name, nodeType);
+        LogHelper.logInfo(this, "createNode(%s, %s)", nodeName, nodeType);
         String path = this.path + "/" + nodeName;
         fs.createNode(path, nodeType);
         // fs.commmit();

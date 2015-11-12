@@ -46,11 +46,17 @@ public class HttpClientHelper {
         }
     }
 
+    public static DefaultHttpClient createHttpClient() {
+        return createHttpClient(null, null);
+    }
+
     public static DefaultHttpClient createHttpClient(String name, String password) {
         DefaultHttpClient httpClient = new DefaultHttpClient(CLIENT_CONNECITON_MANAGER);
-        httpClient.getCredentialsProvider().setCredentials(
-                new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
-                new UsernamePasswordCredentials(name, password));
+        if (name != null) {
+            httpClient.getCredentialsProvider().setCredentials(
+                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT),
+                    new UsernamePasswordCredentials(name, password));
+        }
         return httpClient;
     }
 

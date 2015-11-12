@@ -33,41 +33,7 @@ public class OpenLogViewerAction extends AbstractAction {
         this.fs = fs;
     }
 
-    public void loadLogFiles() {
-        final Runnable initSlingFsTask = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String url = "/bin/remotelog.html";
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("action", "list");
-                    byte[] resp = fs.sendGet(url, params);
-                    ByteArrayInputStream is = new ByteArrayInputStream(resp);
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    String line = null;
-                    boolean firstLine = true;
-                    while ((line = br.readLine()) != null) {
-                        line = line.trim();
-                        if (line.contains("No resource found")){
-                            logFiles.clear();
-                            return;
-                        }
-                        
-                        if (!firstLine) {
-                            logFiles.add(line);
-                        } else {
-                            firstLine = false;
-                        }
-                    }
-
-                } catch (Exception ex) {
-                    LogHelper.logError(ex);
-                }
-            }
-        };
-        ProgressUtils.runOffEventDispatchThread(initSlingFsTask, "Loading log file list", new AtomicBoolean(false), false);
-
-    }
+   
     
     private void openLogFile(String logName){
         LogViewer.openLogViewer(fs, logName);
@@ -75,9 +41,8 @@ public class OpenLogViewerAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        loadLogFiles();
          OpenLogViewerDialog olvd = new OpenLogViewerDialog(null, true);
-        olvd.init(logFiles);
+        olvd.init(fs);
         SwingHelper.showDialog(olvd);
         System.out.println(olvd.isLogFilesSelected());
         Set<String> logFiles = olvd.getSelectedLogFiles();

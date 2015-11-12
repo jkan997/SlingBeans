@@ -40,6 +40,7 @@ public class LogViewer {
         IOProvider iop = IOProvider.getDefault();
         String ioName = logName;
         InputOutput io = iop.getIO(ioName, false);
+
         if (io != null) {
             io.closeInputOutput();
         }
@@ -84,6 +85,7 @@ public class LogViewer {
             @Override
             public void run() {
                 if (io.isClosed()) {
+                    cancel();
                     dispose();
                 } else {
                     try {
@@ -140,7 +142,7 @@ public class LogViewer {
         if (logName != null) {
             params.put("logFile", logName);
         }
-        byte[] resp = fs.sendGet(url, params,false);
+        byte[] resp = fs.sendGet(url, params, false);
         InputStream is = new ByteArrayInputStream(resp);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line = null;
@@ -151,16 +153,13 @@ public class LogViewer {
                 if (newLastPos > lastPos) {
                     lastPos = newLastPos;
                 }
-            } else {
-                /*  if ((hideReplicationCheck.isSelected())
+            } else /*  if ((hideReplicationCheck.isSelected())
                  && (line.indexOf("com.day.cq.replication.Agent") >= 0)) {
                  // Skip line
-                 } */
-                if (line.length() > 0) {
-                    res = true;
-                    logWriter.append(line);
-                    logWriter.append("\n");
-                }
+                 } */ if (line.length() > 0) {
+                res = true;
+                logWriter.append(line);
+                logWriter.append("\n");
             }
         }
         br.close();
