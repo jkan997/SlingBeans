@@ -1,6 +1,6 @@
 <version>
 <id>1.2</id>
-<released>2016-01-27<released>
+<released>2016-01-27</released>
 <changes>
 * Local Sling tree not collapsing after export to server
 * Logging turned off by default
