@@ -1,0 +1,9 @@
+<version>
+<id>1.1</id>
+<released>2016-01-27</released>
+<changes>
+* Local Sling tree not collapsing after export to server
+* Logging turned off by default
+</changes>
+<download>https://raw.githubusercontent.com/jkan997/SlingBeans/master/dist/org-jkan997-slingbeans.nbm</download>
+</version>
