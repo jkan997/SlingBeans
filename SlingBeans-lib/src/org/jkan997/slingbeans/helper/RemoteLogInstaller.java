@@ -6,7 +6,7 @@
 package org.jkan997.slingbeans.helper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,33 +29,41 @@ public class RemoteLogInstaller {
 
     public void installRemoteLog() throws IOException {
         DefaultHttpClient httpClient = HttpClientHelper.createHttpClient();
-        String remoteLogUrl = "https://github.com/jkan997/SlingRemoteLog/raw/master/Release/remotelog-server.jar";
+        String remoteLogUrl = "https://raw.githubusercontent.com/jkan997/SlingRemoteLog/master/Release/RemoteLog-bundle.jar";
         HttpGet get = new HttpGet(remoteLogUrl);
         HttpResponse response = httpClient.execute(get);
         HttpEntity resEntity = response.getEntity();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
         IOHelper.readInputStreamToOutputStream(resEntity.getContent(), bos);
         get.releaseConnection();
         bos.close();
         LogHelper.logInfo(this, "Downloaded RemoteLog, size %d url %s", bos.size(), remoteLogUrl);
-        FileObject appsFo = fs.getFileObject("/apps");
+        /* FileOutputStream tmpFos = new FileOutputStream("/tmp/rl.zip");
+        tmpFos.write(bos.toByteArray());
+        tmpFos.close();
+        if (1 == 1) {
+            return;
+        }*/
         FileObject remoteLogFo;
         FileObject remoteLogInstallFo;
         try {
-            remoteLogFo = (FileObject) appsFo.getFileObject("remotelog");
+            remoteLogFo = fs.getFileObject("/apps/remotelog");
             remoteLogFo.delete();
             System.out.println("Removing existing remote log.");
         } catch (Exception ex) {
             System.out.println("No existing remote log.");
         }
+
+        FileObject appsFo = fs.getFileObject("/apps");
         appsFo.createNode("remotelog", "sling:Folder");
         fs.commmit();
         remoteLogFo = (FileObject) fs.getFileObject("/apps/remotelog");
-        remoteLogFo.createNode("install", "sling:Folder");
+        remoteLogFo.createNode("install", "nt:folder");
         fs.commmit();
         remoteLogInstallFo = (FileObject) fs.getFileObject("/apps/remotelog/install");
 
-        remoteLogInstallFo.createFile("remotelog.jar", bos.toByteArray());
+        remoteLogInstallFo.createFile("remotelog.jar", bos.toByteArray(), "application/java-archive");
         fs.commmit();
     }
 }

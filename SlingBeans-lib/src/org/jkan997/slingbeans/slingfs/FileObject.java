@@ -429,13 +429,19 @@ public class FileObject extends org.openide.filesystems.FileObject implements Sl
         fs.createNode(path, nodeType);
         // fs.commmit();
     }
+    
+        public void createFile(String nodeName, byte[] content) throws IOException {
+            createFile(nodeName,content,null);
+        }
 
-    public void createFile(String nodeName, byte[] content) throws IOException {
+    public void createFile(String nodeName, byte[] content, String mimeType) throws IOException {
         LogHelper.logInfo(this, "createFile(%s, %d)", name, content.length);
         String path = this.path + "/" + nodeName;
-        fs.createFile(path, content);
+        fs.createFile(path, content,mimeType);
         // fs.commmit();
     }
+    
+    
 
     @Override
     public boolean isReadOnly() {

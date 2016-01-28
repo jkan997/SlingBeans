@@ -196,12 +196,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         FileObject res = null;
         if (cache.containsKey(path)) {
             res = cache.get(path);
-        } else {
-            if (createNew) {
-                res = new FileObject(this);
-                res.setPath(path);
-                cache.put(path, res);
-            }
+        } else if (createNew) {
+            res = new FileObject(this);
+            res.setPath(path);
+            cache.put(path, res);
         }
         return res;
     }
@@ -252,12 +250,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
             boolean sortChildren = false;
             if (res.getParent() == null) {
                 sortChildren = true;
-            } else {
-                if (this.nodeTypes != null) {
-                    NodeType nodeType = this.nodeTypes.getByName(res.getPrimaryType());
-                    if ((nodeType != null) && (nodeType.isHasOrderableChildNodes())) {
-                        sortChildren = true;
-                    }
+            } else if (this.nodeTypes != null) {
+                NodeType nodeType = this.nodeTypes.getByName(res.getPrimaryType());
+                if ((nodeType != null) && (nodeType.isHasOrderableChildNodes())) {
+                    sortChildren = true;
                 }
             }
             //sortChildren = false;
@@ -545,13 +541,16 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         changes.put(key, value);
     }
 
-    public static void createFile(String path, byte[] content, Map<String, Object> changes) {
+    private static void createFileWithChanges(String path, byte[] content, String mimeType, Map<String, Object> changes) {
         if (content == null) {
             content = "".getBytes();
         }
         createNode(path, "nt:file", changes);
         String contentPath = path + "/jcr:content";
         createNode(contentPath, "nt:resource", changes);
+        if (mimeType != null) {
+                setNodeAttribute(contentPath, "jcr:mimeType", mimeType, changes);
+            }
         setNodeAttribute(contentPath, "jcr:data", content, changes);
     }
 
@@ -559,11 +558,12 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         createNode(path, NodeTypeSet.SLING_FOLDER, changes);
     }
 
-    public void createFile(String path, byte[] content) {
+    public void createFile(String path, byte[] content, String mimeType) {
         path = StringHelper.normalizePath(path);
         try {
             Map<String, Object> changes = new LinkedHashMap<String, Object>();
-            createFile(path, content, changes);
+            createFileWithChanges(path, content, mimeType,changes);
+            
             sendPost(changes);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -571,11 +571,15 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
         }
     }
 
+    public void createFile(String path, byte[] content) {
+        createFile(path, content, null);
+    }
+
     public void createFile(String path, String content) {
         path = StringHelper.normalizePath(path);
         try {
             Map<String, Object> changes = new LinkedHashMap<String, Object>();
-            createFile(path, content.getBytes(), changes);
+            createFileWithChanges(path, content.getBytes(), "text/plain",changes);
             sendPost(changes);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -860,18 +864,18 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     private void moveCopyNode(String src, String dest, boolean copy) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(":operation", copy ? "copy" : "move");
-        if (!dest.endsWith("/")){
+        if (!dest.endsWith("/")) {
             dest = dest + "/";
         }
-        if (!src.startsWith("/")){
-            src = "/" + src;    
+        if (!src.startsWith("/")) {
+            src = "/" + src;
         }
-        if (!dest.startsWith("/")){
-            dest = "/" + dest;    
+        if (!dest.startsWith("/")) {
+            dest = "/" + dest;
         }
         params.put(":dest", dest);
-        
-        byte[] data =  this.sendPost(src, null,params);
+
+        byte[] data = this.sendPost(src, null, params);
         LogHelper.logInfo(this, new String(data));
     }
 

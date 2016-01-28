@@ -11,11 +11,6 @@
         <group name="VISA"/>
         <group name="GeoSpatial AEM"/>
         <group name="MotorolaTraining"/>
-        <group name="SlingBeans">
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/version/VersionManager.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/version/Version.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/TestVersionManager.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/dialogs/NewVersionDialog.java</file>
-        </group>
+        <group name="SlingBeans"/>
     </open-files>
 </project-private>

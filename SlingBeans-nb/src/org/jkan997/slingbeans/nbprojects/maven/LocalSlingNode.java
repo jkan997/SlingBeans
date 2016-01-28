@@ -1,7 +1,8 @@
 package org.jkan997.slingbeans.nbprojects.maven;
 
 /**
- * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
+ * SlingBeans - NetBeans Sling plugin https://github.com/jkan997/SlingBeans
+ * Licensed under Apache 2.0 license http://www.apache.org/licenses/LICENSE-2.0
  */
 import java.awt.Image;
 import java.awt.datatransfer.Transferable;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.nbactions.submenu.CQ5Submenu;
+import org.jkan997.slingbeans.nbprojects.maven.actions.AddFileAction;
 import org.jkan997.slingbeans.nbprojects.maven.actions.OpenEditorAction;
 import org.jkan997.slingbeans.nbprojects.maven.actions.OpenInExplorerAction;
 import org.jkan997.slingbeans.nbprojects.maven.actions.RefreshAction;
@@ -37,6 +39,7 @@ public class LocalSlingNode extends LocalAbstractNode {
     private VltExportAction vltExportAction;
     private OpenInExplorerAction openInExplorerAction;
     private CQ5Submenu cq5submenu;
+    private AddFileAction addFileAction;
 
     public LocalSlingNode(LocalFileObject fileObject, Children children) {
         super(children, Lookups.singleton(fileObject));
@@ -48,6 +51,7 @@ public class LocalSlingNode extends LocalAbstractNode {
     private void initActions() {
         openEditorAction = new OpenEditorAction(this);
         openInExplorerAction = new OpenInExplorerAction(this);
+        addFileAction = new AddFileAction(this);
         refreshAction = new RefreshAction(this);
         vltImportAction = new VltImportAction(this);
         vltExportAction = new VltExportAction(this);
@@ -65,12 +69,16 @@ public class LocalSlingNode extends LocalAbstractNode {
             if (fileObject.isSlingFile()) {
                 actions.add(openEditorAction);
             }
-            //actions.add(cq5submenu);
             actions.add(openInExplorerAction);
+
+            //actions.add(cq5submenu);
             actions.add(refreshAction);
             actions.add(vltImportAction);
             actions.add(vltExportAction);
-            
+            if (fileObject.isSlingFolder()) {
+                actions.add(addFileAction);
+
+            }
             actionArr = actions.toArray(new Action[]{});
         }
         return actionArr;

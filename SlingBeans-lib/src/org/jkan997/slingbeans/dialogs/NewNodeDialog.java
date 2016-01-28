@@ -33,6 +33,14 @@ public class NewNodeDialog extends javax.swing.JDialog {
         checkTypeIsFile();
     }
 
+    public void configureOnlyLocalFile() {
+        nodeTypeCombo.setEditable(false);
+        nodeTypeCombo.setEnabled(false);
+        fileText.setEnabled(false);
+        fileText.setEditable(false);
+        fileBrowseBtn.setEnabled(false);
+    }
+
     public void setNodeTypes(Set nodeTypes) {
         comboBoxSet = new ComboBoxSet(nodeTypes, true);
         AutoCompleteSupport.install(nodeTypeCombo, GlazedLists.eventListOf(comboBoxSet.getStringArray()));
@@ -92,7 +100,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
 
         nodeNameText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.nodeNameText.text")); // NOI18N
 
-        nodeTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        nodeTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "nt:file" }));
         nodeTypeCombo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nodeTypeComboActionPerformed(evt);

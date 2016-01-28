@@ -122,7 +122,7 @@ public class ContentChangeListener implements FileChangeListener {
                     wrt.write("Trying to create new file in folder" + parentPath + "\n");
                     org.jkan997.slingbeans.slingfs.FileObject targetFoParent = fs.getFileObject(parentPath);
                     if (targetFoParent != null) {
-                        fs.createFile(fsId, parentPath);
+                        fs.createFile(newFilePath, fileContent);
                     }
                 }
             }

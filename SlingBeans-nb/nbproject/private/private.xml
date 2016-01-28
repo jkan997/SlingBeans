@@ -14,8 +14,7 @@
         <group name="GeoSpatial AEM"/>
         <group name="MotorolaTraining"/>
         <group name="SlingBeans">
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbtree/SlingTreeTopComponent.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbservices/SlingFsConnector.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbprojects/maven/ContentChangeListener.java</file>
         </group>
     </open-files>
 </project-private>

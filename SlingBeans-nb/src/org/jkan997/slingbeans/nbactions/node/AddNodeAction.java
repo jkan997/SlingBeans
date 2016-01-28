@@ -88,6 +88,9 @@ public class AddNodeAction extends AbstractAction {
                 createNode(selectedNodeName, selectedNodeType, fileContent);
             }
 
+            
+            
+            
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }
