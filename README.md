@@ -18,3 +18,9 @@ Main features:
 * It is possible to automatically invoke sync actions (bi-directional based on Apache Vault)
 
 ![screen shot 2015-05-23 at 01 37 12](https://cloud.githubusercontent.com/assets/2896358/7781298/6b6fcfea-00ec-11e5-90d2-71ea33f4464d.png)
+
+Changelog
+----------
+Version 1.1 (2016-01-28)
+* Fixed node refresh issues after import export
+* Added 'Open filter file...' command inside project 'Sling Content' 
