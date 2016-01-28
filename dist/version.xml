@@ -1,9 +1,12 @@
 <version>
 <id>1.1</id>
-<released>2016-01-27</released>
+<released>2016-01-28</released>
 <changes>
+* Fixed node refresh issues after import export
+* Added 'Open filter file...' command inside project 'Sling Content' 
 * Local Sling tree not collapsing after export to server
 * Logging turned off by default
+* Update available notification from the next version
 </changes>
 <download>https://raw.githubusercontent.com/jkan997/SlingBeans/master/dist/org-jkan997-slingbeans.nbm</download>
 </version>
