@@ -4,14 +4,16 @@
  * Licensed under Apache 2.0 license
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.dialogs;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Set;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.KeyStroke;
 import org.jkan997.slingbeans.helper.ComboBoxSet;
 
 /**
@@ -35,7 +37,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
         comboBoxSet = new ComboBoxSet(nodeTypes, true);
         AutoCompleteSupport.install(nodeTypeCombo, GlazedLists.eventListOf(comboBoxSet.getStringArray()));
         nodeTypeCombo.setSelectedItem(initialSelection);
-        if (lockSelection){
+        if (lockSelection) {
             nodeTypeCombo.setEnabled(false);
         }
     }
@@ -69,8 +71,6 @@ public class NewNodeDialog extends javax.swing.JDialog {
         this.lockSelection = lockSelection;
     }
 
-    
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -88,6 +88,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.title")); // NOI18N
+        setResizable(false);
 
         nodeNameText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.nodeNameText.text")); // NOI18N
 
@@ -119,6 +120,13 @@ public class NewNodeDialog extends javax.swing.JDialog {
                 createBtnActionPerformed(evt);
             }
         });
+        createBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    createBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         cancelBtn.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.cancelBtn.text")); // NOI18N
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -126,6 +134,13 @@ public class NewNodeDialog extends javax.swing.JDialog {
                 cancelBtnActionPerformed(evt);
             }
         });
+        cancelBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cancelBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         fileText.setEditable(false);
         fileText.setText(org.openide.util.NbBundle.getMessage(NewNodeDialog.class, "NewNodeDialog.fileText.text")); // NOI18N
@@ -159,7 +174,7 @@ public class NewNodeDialog extends javax.swing.JDialog {
                     .add(nodeNameText)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                         .add(134, 134, 134)
-                        .add(cancelBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
+                        .add(cancelBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(createBtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -183,9 +198,9 @@ public class NewNodeDialog extends javax.swing.JDialog {
                         .add(fileLabel)
                         .add(fileBrowseBtn)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cancelBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(createBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(createBtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(cancelBtn))
                 .addContainerGap())
         );
 
@@ -194,11 +209,13 @@ public class NewNodeDialog extends javax.swing.JDialog {
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
         createNode = true;
         this.setVisible(false);
+        this.dispose();
 
     }//GEN-LAST:event_createBtnActionPerformed
 
@@ -206,30 +223,28 @@ public class NewNodeDialog extends javax.swing.JDialog {
         checkTypeIsFile();
     }//GEN-LAST:event_nodeTypeComboActionPerformed
 
-    
-    private void checkTypeIsFile(){
+    private void checkTypeIsFile() {
         boolean typeIsFile = false;
         String nodeType = getSelectedNodeType();
-        if ((nodeType!=null)&&("nt:file".equalsIgnoreCase(nodeType))){
+        if ((nodeType != null) && ("nt:file".equalsIgnoreCase(nodeType))) {
             typeIsFile = true;
         }
         fileBrowseBtn.setEnabled(typeIsFile);
         fileText.setEnabled(typeIsFile);
-        
+
     }
     private final JFileChooser fc = new JFileChooser();
-    private  File selectedFile;
+    private File selectedFile;
 
     public File getSelectedFile() {
         return selectedFile;
     }
-    
-    
-    
+
+
     private void fileBrowseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileBrowseBtnActionPerformed
         fc.showOpenDialog(this);
         selectedFile = fc.getSelectedFile();
-        if (selectedFile!=null){
+        if (selectedFile != null) {
             fileText.setText(selectedFile.getAbsolutePath());
             nodeNameText.setText(selectedFile.getName());
         }

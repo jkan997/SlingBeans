@@ -43,11 +43,17 @@ public class LogHelper {
         checkLogs();
     }
 
+    public static long lastCheckTime = 0;
+
     private static void checkLogs() {
-        String disableLogsIndicator = SETTINGS_DIR + "/noLogs";
-        String disableHttpLogsIndicator = SETTINGS_DIR + "/noHttpLogs";
-        disableLogs = IOHelper.fileExists(disableLogsIndicator);
-        disableHttpLogs = disableLogs || IOHelper.fileExists(disableHttpLogsIndicator);
+        long currentTime = System.currentTimeMillis();
+        if ((currentTime - lastCheckTime) > 5000) {
+            lastCheckTime = currentTime;
+            String enableLogsIndicator = SETTINGS_DIR + "/enableLogs";
+            String enableHttpLogsIndicator = SETTINGS_DIR + "/enableHttpLogs";
+            disableLogs = !IOHelper.fileExists(enableLogsIndicator);
+            disableHttpLogs = !IOHelper.fileExists(enableHttpLogsIndicator);
+        }
     }
 
     public static void logError(Exception ex) {

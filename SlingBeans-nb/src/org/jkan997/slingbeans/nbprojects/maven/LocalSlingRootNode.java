@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.Action;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.nbprojects.maven.actions.OpenFilterAction;
 import org.jkan997.slingbeans.nbprojects.maven.actions.RefreshAction;
 import org.jkan997.slingbeans.nbprojects.maven.actions.VltImportAction;
 import org.jkan997.slingbeans.slingfs.local.LocalFileSystem;
 import org.netbeans.api.progress.ProgressUtils;
 import org.netbeans.api.project.Project;
-import org.netbeans.spi.project.ui.ProjectOpenedHook;
 import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataFolder;
 import org.openide.nodes.Children;
+import org.openide.nodes.Node;
 import org.openide.nodes.NodeAdapter;
 import org.openide.nodes.NodeEvent;
 import org.openide.util.ImageUtilities;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.Lookups;
 
 public class LocalSlingRootNode extends LocalAbstractNode {
 
@@ -28,6 +27,16 @@ public class LocalSlingRootNode extends LocalAbstractNode {
     private RefreshAction refreshAction;
     private VltImportAction vltImportAction;
     private LocalFileSystem fileSystem;
+    private Project project;
+    private OpenFilterAction openFilterAction;
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public LocalSlingRootNode(Children children) {
         super(children != null ? children : Children.LEAF);
@@ -44,6 +53,7 @@ public class LocalSlingRootNode extends LocalAbstractNode {
     private void initActions() {
         refreshAction = new RefreshAction(this);
         vltImportAction = new VltImportAction(this);
+        openFilterAction = new OpenFilterAction(this);
 
     }
 
@@ -57,14 +67,17 @@ public class LocalSlingRootNode extends LocalAbstractNode {
             List<Action> actions = new ArrayList<Action>();
             actions.add(refreshAction);
             actions.add(vltImportAction);
+            actions.add(openFilterAction);
             actionArr = actions.toArray(new Action[]{});
         }
         return actionArr;
     }
 
+    public final static String SLING_CONTENT = "Sling Content";
+
     @Override
     public String getDisplayName() {
-        return "Sling Content";
+        return SLING_CONTENT;
     }
 
     @Override
@@ -96,17 +109,24 @@ public class LocalSlingRootNode extends LocalAbstractNode {
     public void initChildren() {
         LocalSlingNodeChildren children = new LocalSlingNodeChildren(fileSystem.getRootFileObject());
         this.setChildren(children);
+
     }
 
     public void refresh() {
+        refresh(null);
+    }
+
+    public void refresh(final Runnable uiActionAfterRefresh) {
         final Runnable loadWorkflowsTask = new Runnable() {
             @Override
             public void run() {
                 refreshAsync();
+                if (uiActionAfterRefresh != null) {
+                    uiActionAfterRefresh.run();
+                }
             }
         };
         ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, "Reading local FS", new AtomicBoolean(false), false);
-
     }
 
     public void refreshAsync() {
@@ -117,6 +137,26 @@ public class LocalSlingRootNode extends LocalAbstractNode {
 
     public LocalFileSystem getFileSystem() {
         return fileSystem;
+    }
+
+    public Node getNodeByPath(String[] pathArr) {
+        Node node = this;
+        boolean foundNode = false;
+        for (String pathPart : pathArr) {
+            foundNode = false;
+            Node[] nodes = node.getChildren().getNodes();
+            for (Node n : nodes) {
+                if (n.getDisplayName().equals(pathPart)) {
+                    node = n;
+                    foundNode = true;
+                    break;
+                }
+            }
+            if (!foundNode) {
+                break;
+            }
+        }
+        return node;
     }
 
 }

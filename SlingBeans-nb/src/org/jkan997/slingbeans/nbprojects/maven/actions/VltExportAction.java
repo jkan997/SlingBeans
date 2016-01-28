@@ -17,6 +17,6 @@ public class VltExportAction extends VltAction{
     public VltExportAction(LocalSlingNode node) {
         super(node);
         this.setActionName("Export to server");
-        this.exportToRemote=false;
+        this.importFromRemote=false;
     }
 }

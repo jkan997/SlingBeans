@@ -9,9 +9,12 @@ package org.jkan997.slingbeans.dialogs;
 
 import ca.odell.glazedlists.GlazedLists;
 import ca.odell.glazedlists.swing.AutoCompleteSupport;
+import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.jkan997.slingbeans.configuration.Configuration;
 import org.jkan997.slingbeans.configuration.ConfigurationImpl;
@@ -85,6 +88,7 @@ public class SlingHostDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(SlingHostDialog.class, "SlingHostDialog.title")); // NOI18N
         setModal(true);
+        setResizable(false);
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(SlingHostDialog.class, "SlingHostDialog.jLabel1.text")); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -101,6 +105,13 @@ public class SlingHostDialog extends javax.swing.JDialog {
                 loginBtnActionPerformed(evt);
             }
         });
+        loginBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    loginBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         cancelBtn.setText("Cancel");
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -108,6 +119,13 @@ public class SlingHostDialog extends javax.swing.JDialog {
                 cancelBtnActionPerformed(evt);
             }
         });
+        cancelBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cancelBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         incorrectLabel.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         incorrectLabel.setForeground(new java.awt.Color(255, 51, 102));

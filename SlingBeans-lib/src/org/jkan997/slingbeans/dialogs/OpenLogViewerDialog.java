@@ -94,7 +94,15 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
     }
 
     public void loadLogFiles(final boolean installRemoteLog) {
+        
         logFiles = new ArrayList<String>();
+
+        final Runnable logFileLoadedRunnable = new Runnable() {
+            public void run() {
+                logFilesLoaded();
+            }
+        };
+
         final Runnable loadLogFilesTask = new Runnable() {
             @Override
             public void run() {
@@ -102,7 +110,7 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
                     installRemoteLog();
                 }
                 loadLogFilesInternal();
-                logFilesLoaded();
+                java.awt.EventQueue.invokeLater(logFileLoadedRunnable);
             }
 
         };
@@ -169,6 +177,7 @@ public class OpenLogViewerDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(OpenLogViewerDialog.class, "OpenLogViewerDialog.title")); // NOI18N
+        setResizable(false);
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

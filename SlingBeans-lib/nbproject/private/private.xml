@@ -12,11 +12,10 @@
         <group name="GeoSpatial AEM"/>
         <group name="MotorolaTraining"/>
         <group name="SlingBeans">
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/RemoteLogInstallerTest.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/slingfs/FileSystem.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/InstallRemoteLog.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/HttpClientHelper.java</file>
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/helper/RemoteLogInstaller.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/version/VersionManager.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/version/Version.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/TestVersionManager.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/dialogs/NewVersionDialog.java</file>
         </group>
     </open-files>
 </project-private>

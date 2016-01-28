@@ -5,16 +5,22 @@ package org.jkan997.slingbeans.nbprojects.maven.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.helper.NbNodeHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingNode;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingRootNode;
+import org.jkan997.slingbeans.nbprojects.maven.MavenProjectUtils;
 import org.jkan997.slingbeans.nbservices.SlingFsFactory;
+import org.jkan997.slingbeans.nbtree.SlingTreeTopComponent;
 import org.jkan997.slingbeans.slingfs.FileSystem;
 import org.jkan997.slingbeans.vlt.VltManager;
 import org.netbeans.api.progress.ProgressUtils;
 import org.openide.nodes.Node;
+import org.openide.windows.WindowManager;
 
 /**
  *
@@ -22,7 +28,7 @@ import org.openide.nodes.Node;
  */
 public abstract class VltAction extends AbstractAction {
 
-    protected boolean exportToRemote = false;
+    protected boolean importFromRemote = false;
 
     public VltAction(Node node) {
         this.node = node;
@@ -37,7 +43,7 @@ public abstract class VltAction extends AbstractAction {
                 VltAction.this.runAction();
             }
         };
-        ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, exportToRemote ? "Exporting to remote" : "Importing from remote", new AtomicBoolean(false), false);
+        ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, importFromRemote ? "Importing from remote" : "Exporting to remote", new AtomicBoolean(false), false);
     }
 
     private void runAction() {
@@ -54,21 +60,21 @@ public abstract class VltAction extends AbstractAction {
             //SwingHelper.showMessage("Please connect to Sling remote repository "+fs);
             if (fs != null) {
                 VltManager vltManager = fs.getVltManager();
-                LocalSlingRootNode rootNode = this.getRootNode();
+                final LocalSlingRootNode rootNode = this.getRootNode();
                 String currentNodePath = null;
                 LocalSlingNode currentNode = null;
                 currentNode = this.getLocalSlingNode();
                 boolean isRootNode = false;
-                if (currentNode!=null){
-                currentNodePath = currentNode.getFileObject().getFilePath();
+                if (currentNode != null) {
+                    currentNodePath = currentNode.getFileObject().getFilePath();
                 }
-                
+
                 if ((this.node instanceof LocalSlingRootNode)) {
                     isRootNode = true;
                 }
-                
+
                 Writer outputWriter = this.getOutputWriter();
-                if (!exportToRemote) {
+                if (!importFromRemote) {
                     if (currentNode != null) {
                         if (currentNode.getLevel() <= 1) {
                             outputWriter.write(String.format("Refusing to export first level node %s to remote server\n", currentNode.getFilePath()));
@@ -80,21 +86,29 @@ public abstract class VltAction extends AbstractAction {
                     } else {
                         LogHelper.logInfo(this, "VltManager export current node is null.");
                     }
+                } else if ((currentNode != null) && (!isRootNode)) {
+                    LogHelper.logInfo(this, "VltManager export %s, %s", rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
+                    vltManager.exportContentFromRemote(rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
+                    outputWriter.write(String.format("Imported %s from remote server %s\n", currentNode.getFilePath(), fs.toString()));
                 } else {
-                    if ((currentNode != null) && (!isRootNode)) {
-                        LogHelper.logInfo(this, "VltManager export %s, %s", rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
-                        vltManager.exportContentFromRemote(rootNode.getContentPath(), currentNode.getFileObject().getFilePath());
-                        outputWriter.write(String.format("Imported %s from remote server %s\n", currentNode.getFilePath(), fs.toString()));
-                    } else {
-                        String ROOT_PATH = "/";
-                        LogHelper.logInfo(this, "VltManager export (root node) %s, %s", rootNode.getContentPath(), ROOT_PATH);
-                        vltManager.exportContentFromRemote(rootNode.getContentPath(), ROOT_PATH);
-                        outputWriter.write(String.format("Imported %s from remote server %s\n", ROOT_PATH, fs.toString()));
-                    }
+                    String ROOT_PATH = "/";
+                    LogHelper.logInfo(this, "VltManager export (root node) %s, %s", rootNode.getContentPath(), ROOT_PATH);
+                    vltManager.exportContentFromRemote(rootNode.getContentPath(), ROOT_PATH);
+                    outputWriter.write(String.format("Imported %s from remote server %s\n", ROOT_PATH, fs.toString()));
+                }
+                if (importFromRemote) {
+                    // DO NOT NEED TO REFRESH LOCAL TREE AFTER EXPORTING
+
+                    Runnable uiActionAfterRefresh = new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] pathArr = NbNodeHelper.getLocalNodePath(node);
+                            MavenProjectUtils.selectAndExpandNode(rootNode.getProject(), pathArr);
+                        }
+                    };
+                    rootNode.refresh(uiActionAfterRefresh);
 
                 }
-
-                rootNode.refresh();
             }
         } catch (Exception ex) {
             LogHelper.logError(ex);

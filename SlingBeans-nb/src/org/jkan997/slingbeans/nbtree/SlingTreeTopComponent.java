@@ -5,11 +5,17 @@
 package org.jkan997.slingbeans.nbtree;
 
 import java.beans.PropertyVetoException;
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.jkan997.slingbeans.dialogs.NewVersionDialog;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.nbservices.SlingFsConnector;
 import org.jkan997.slingbeans.helper.StringHelper;
+import org.jkan997.slingbeans.helper.SwingHelper;
+import org.jkan997.slingbeans.nbservices.SlingFsFactory;
 import org.jkan997.slingbeans.slingfs.FileObject;
 import org.jkan997.slingbeans.slingfs.FileSystem;
+import org.jkan997.slingbeans.version.Version;
+import org.jkan997.slingbeans.version.VersionManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -21,6 +27,7 @@ import org.openide.nodes.Node;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.Lookups;
 import org.openide.windows.TopComponent;
+import org.netbeans.api.progress.ProgressUtils;
 
 /**
  * Top component which displays something.
@@ -98,6 +105,8 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
     }
     protected SlingNode selectedSlingNode = null;
 
+    private String selectedPath = null;
+
     private BeanTreeView getBeanTreeView() {
 
         BeanTreeView res = new BeanTreeView() {
@@ -108,7 +117,8 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
                     SlingNode slingNode = (SlingNode) (nodes[0]);
                     selectedSlingNode = slingNode;
                     if (slingNode != null) {
-                        pathText.setText("/" + slingNode.getPath());
+                        selectedPath = "/" + slingNode.getPath();
+                        pathText.setText(selectedPath);
                     }
                 }
 
@@ -228,6 +238,8 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
 
     private void connectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectBtnActionPerformed
         if (connectBtn.getText().equals("Disconnect")) {
+            SlingFsFactory slingFsFactory = SlingFsFactory.lookup();
+            slingFsFactory.unregisterAll();
             rootFo = null;
             this.initSlingFs(rootFo);
             this.pathText.setText("Not connected");
@@ -235,7 +247,7 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
             rootNode.setName("Not connected");
             connectBtn.setText("Connect");
         } else if (connectBtn.getText().equals("Connect")) {
-
+            checkNewestVersion();
             SlingFsConnector sfh = new SlingFsConnector() {
                 @Override
                 protected void rootNodeHandler(FileObject fo) {
@@ -276,6 +288,37 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         //selectedSlingNode.refresh();
     }//GEN-LAST:event_gotoBtnActionPerformed
 
+    public void refreshPath(String path) {
+        path = StringHelper.normalizePath(path);
+        String[] pathArr = path.split("/");
+        Node node = mgr.getRootContext();
+        boolean childFound = false;
+        StringBuilder pathSb = new StringBuilder();
+        for (String part : pathArr) {
+            childFound = false;
+            for (Node child : node.getChildren().getNodes()) {
+                String nodeName = child.getDisplayName();
+                if (nodeName.equals(part)) {
+                    childFound = true;
+                    node = child;
+                    pathSb.append("/" + node.getName());
+                    break;
+                }
+            }
+            if (!childFound) {
+                break;
+            }
+        }
+        if (node instanceof SlingNode) {
+            LogHelper.logInfo(this, "Refreshing path %s", pathSb);
+            ((SlingNode) node).refresh();
+        }
+    }
+
+    public String getPath(){
+        return this.selectedPath;
+    }
+    
     public void gotoPath(String path) {
         BeanTreeView btv = (BeanTreeView) crxScrollPane;
         path = StringHelper.normalizePath(path);
@@ -339,5 +382,28 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
         // TODO read your settings according to their version
+    }
+
+    private void checkNewestVersion() {
+        final Runnable checkVersionTask = new Runnable() {
+            @Override
+            public void run() {
+                final Version version = VersionManager.getNewestVersion();
+                if (version != null) {
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            NewVersionDialog newVersionDialog = new NewVersionDialog(null, false);
+                            newVersionDialog.setVersion(version);
+                            SwingHelper.showDialog(newVersionDialog);
+
+                        }
+                    });
+                }
+            }
+        };
+
+        Thread t = new Thread(checkVersionTask);
+        t.start();
+
     }
 }

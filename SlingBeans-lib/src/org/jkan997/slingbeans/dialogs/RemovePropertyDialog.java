@@ -41,6 +41,7 @@ public class RemovePropertyDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(RemovePropertyDialog.class, "RemovePropertyDialog.title")); // NOI18N
+        setResizable(false);
 
         cancelBtn.setText(org.openide.util.NbBundle.getMessage(RemovePropertyDialog.class, "RemovePropertyDialog.cancelBtn.text")); // NOI18N
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {

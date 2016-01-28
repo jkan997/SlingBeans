@@ -17,7 +17,7 @@ public class VltImportAction extends VltAction{
     public VltImportAction(Node node) {
         super(node);
         this.setActionName("Import from server");
-        this.exportToRemote=true;
+        this.importFromRemote=true;
 
     }
 }

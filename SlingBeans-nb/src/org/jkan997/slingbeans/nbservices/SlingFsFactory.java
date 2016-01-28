@@ -72,4 +72,9 @@ public class SlingFsFactory extends URLMapper {
     public FileSystem getFileSystem(String fsId) {
         return fsFactory.getFileSystem(fsId);
     }
+
+    public void unregisterAll() {
+        fsFactory.unregisterAllFilesystems();
+        this.defaultFileSystemId=null;
+    }
 }

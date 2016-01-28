@@ -6,8 +6,11 @@ package org.jkan997.slingbeans.nbprojects.maven.actions;
 
 import java.awt.event.ActionEvent;
 import org.jkan997.slingbeans.helper.LogHelper;
+import org.jkan997.slingbeans.helper.NbNodeHelper;
 import org.jkan997.slingbeans.nbprojects.maven.LocalAbstractNode;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingRootNode;
+import org.jkan997.slingbeans.nbprojects.maven.MavenProjectUtils;
+import org.openide.nodes.Node;
 
 /**
  *
@@ -23,7 +26,14 @@ public class RefreshAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         LogHelper.logInfo(this, "Action %s", this.getClass().getName());
-        LocalSlingRootNode slingRootNode = this.getRootNode();
-        slingRootNode.refresh();
+        final LocalSlingRootNode slingRootNode = this.getRootNode();
+        Runnable uiActionAfterRefresh = new Runnable() {
+            @Override
+            public void run() {
+                String[] pathArr = NbNodeHelper.getLocalNodePath(node);
+                MavenProjectUtils.selectAndExpandNode(slingRootNode.getProject(), pathArr);
+            }
+        };
+        slingRootNode.refresh(uiActionAfterRefresh);
     }
 }

@@ -60,13 +60,4 @@ public class HttpClientHelper {
         return httpClient;
     }
 
-    public static void main(String[] args) throws Exception {
-        String urlOverHttps = "https://author203.adobedemo.com/projects.html";
-        DefaultHttpClient httpClient = createHttpClient("admin", "admin");
-        HttpGet getMethod = new HttpGet(urlOverHttps);
-        HttpResponse response = httpClient.execute(getMethod);
-        InputStream is = response.getEntity().getContent();
-        String s = IOHelper.readInputStreamToString(is);
-        System.out.println(s);
-    }
 }

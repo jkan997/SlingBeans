@@ -34,7 +34,6 @@ public class LocalSlingNodeFactory implements NodeFactory {
         //MyCoolLookupItem item = project.getLookup().lookup(MyCoolLookupItem.class);
         //if (item != null) {
         try {
-
             LogHelper.logInfo(this, "Project path: " + project.getProjectDirectory().getPath());
             String projectPath = project.getProjectDirectory().getPath();
             contentPath = projectPath + "/src/main/content";
@@ -44,6 +43,7 @@ public class LocalSlingNodeFactory implements NodeFactory {
                 LocalFileSystem lfs = new LocalFileSystem();
                 lfs.setContentPath(contentPath);
                 LocalSlingRootNode rootNode = new LocalSlingRootNode(null);
+                rootNode.setProject(project);
                 rootNode.setFileSystem(lfs);
                 rootNode.initChildren();
                 ContentChangeListener.createListener(contentPath, rootNode);

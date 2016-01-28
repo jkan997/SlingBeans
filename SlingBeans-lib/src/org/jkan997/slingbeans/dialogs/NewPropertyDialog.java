@@ -4,18 +4,14 @@
  * Licensed under Apache 2.0 license
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.dialogs;
 
 import javax.swing.DefaultComboBoxModel;
 import org.jkan997.slingbeans.helper.PropertyType;
 
-
-
 public class NewPropertyDialog extends javax.swing.JDialog {
 
     private boolean createProperty = false;
-    
 
     public NewPropertyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -26,10 +22,8 @@ public class NewPropertyDialog extends javax.swing.JDialog {
     }
 
     public void init() {
-    
+
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,16 +178,17 @@ public class NewPropertyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void propertyTypeComboPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_propertyTypeComboPropertyChange
-            //propertyNameText.setText();
+        //propertyNameText.setText();
     }//GEN-LAST:event_propertyTypeComboPropertyChange
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        if (!valueEditor.isValidValue()){
+        if (!valueEditor.isValidValue()) {
             errorLabel.setText("Invalid value");
         } else {
             //errorLabel.setText("Value OK");
-            createProperty=true;
+            createProperty = true;
             setVisible(false);
+            this.dispose();
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -204,25 +199,25 @@ public class NewPropertyDialog extends javax.swing.JDialog {
 
     private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     public boolean isCreateProperty() {
         return createProperty;
     }
 
-    
-    public String getPropertyName(){
+    public String getPropertyName() {
         return propertyNameText.getText();
     }
-    
-    public String getPropertyType(){
+
+    public String getPropertyType() {
         return propertyTypeCombo.getSelectedItem().toString();
     }
-    
-    public Object getPropertyValue(){
+
+    public Object getPropertyValue() {
         return valueEditor.getValue();
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton cancelBtn;

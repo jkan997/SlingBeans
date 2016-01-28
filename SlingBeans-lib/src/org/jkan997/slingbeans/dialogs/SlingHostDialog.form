@@ -7,6 +7,7 @@
       <ResourceString bundle="org/jkan997/slingbeans/dialogs/Bundle.properties" key="SlingHostDialog.title" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -130,6 +131,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginBtnActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="loginBtn.registerKeyboardAction(&#xa;new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                loginBtnActionPerformed(evt);&#xa;            }&#xa;        }&#xa;, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="cancelBtn">
       <Properties>
@@ -138,6 +142,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelBtnActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_ListenersCodePost" type="java.lang.String" value="cancelBtn.registerKeyboardAction(&#xa;new java.awt.event.ActionListener() {&#xa;            public void actionPerformed(java.awt.event.ActionEvent evt) {&#xa;                cancelBtnActionPerformed(evt);&#xa;            }&#xa;        }&#xa;, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="incorrectLabel">
       <Properties>

@@ -74,9 +74,14 @@ public class CQ5Submenu extends AbstractSubmenu {
             addAction(swaAction);
             addAction(swwdAction);
             OpenBrowserAction openWfConsoleAction = new OpenBrowserAction(fileObject);
-            openWfConsoleAction.setActionName("Open Workflow console");
+            openWfConsoleAction.setActionName("Open Workflow Console");
             openWfConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_WF_CONSOLE;
             addAction(openWfConsoleAction);
+            
+            OpenBrowserAction openSystemConsoleAction = new OpenBrowserAction(fileObject);
+            openSystemConsoleAction.setActionName("Open System Console");
+            openSystemConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_SYSTEM_CONSOLE;
+            addAction(openSystemConsoleAction);
         }
 
     }

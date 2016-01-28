@@ -16,6 +16,8 @@ public class OpenBrowserAction extends AbstractAction {
     public final static int OPEN_BROWSER_MODE_HTML = 1;
     public final static int OPEN_BROWSER_MODE_CRXDE = 2;
     public final static int OPEN_BROWSER_MODE_WF_CONSOLE = 3;
+    public final static int OPEN_BROWSER_MODE_SYSTEM_CONSOLE = 4;
+
     public int openBrowserMode = OPEN_BROWSER_MODE_CRXDE;
     private final FileObject fileObject;
 
@@ -40,7 +42,9 @@ public class OpenBrowserAction extends AbstractAction {
                 urlSb.append("/crx/de/index.jsp#/" + fileObject.getPath());
             } else if (openBrowserMode == OPEN_BROWSER_MODE_WF_CONSOLE) {
                 urlSb.append("/workflow");
-            } else {
+            }else if (openBrowserMode == OPEN_BROWSER_MODE_SYSTEM_CONSOLE) {
+                urlSb.append("/system/console/configMgr");
+            }  else {
                 urlSb.append("/" + fileObject.getPath() + ".html");
             }
             Desktop desktop = Desktop.getDesktop();
