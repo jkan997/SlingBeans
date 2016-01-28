@@ -1,5 +1,5 @@
 <version>
-<id>1.2</id>
+<id>1.1</id>
 <released>2016-01-27</released>
 <changes>
 * Local Sling tree not collapsing after export to server
