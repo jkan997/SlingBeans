@@ -24,3 +24,6 @@ Changelog
 Version 1.1 (2016-01-28)
 * Fixed node refresh issues after import export
 * Added 'Open filter file...' command inside project 'Sling Content' 
+* Local Sling tree not collapsing after export to server
+* Logging turned off by default
+* Update available notification from the next version
