@@ -21,9 +21,10 @@ Main features:
 
 Changelog
 ----------
-Version 1.1 (2016-01-28)
+Version 1.1 (2016-01-29)
 * Fixed node refresh issues after import export
 * Added 'Open filter file...' command inside project 'Sling Content' 
 * Local Sling tree not collapsing after export to server
 * Logging turned off by default
 * Update available notification from the next version
+* It is possible to create new files inside the project (but not others node -> create on remote and then export)
