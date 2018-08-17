@@ -4,14 +4,6 @@
  */
 package org.jkan997.slingbeans.cli;
 
-import java.io.File;
-import java.io.FileInputStream;
-
-import org.jkan997.slingbeans.helper.IOHelper;
-import org.jkan997.slingbeans.helper.LogHelper;
-import org.jkan997.slingbeans.slingfs.FileObject;
-import org.jkan997.slingbeans.slingfs.FileSystem;
-
 /**
  *
  * @author jakaniew

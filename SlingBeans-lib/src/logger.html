@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+            body,html{
+                font-family: courier;
+            }
+        </style>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <script>
+
+            $(document).ready(init);
+
+            function init() {
+                alert("SSS");
+            }
+
+            function checkTail() {
+                console.log("SSS");
+                var USERNAME = "admin";
+                var PASSWORD = "admin";   
+                $.ajax
+                        ({
+                            type: "GET",
+                            url: "http://127.0.0.1:4502/system/console/slinglog/tailer.txt?tail=1000&grep=*&name=%2Flogs%2Ferror.log",
+                            dataType: 'text',
+                            headers: {
+                                "Authorization": "Basic " + btoa(USERNAME + ":" + PASSWORD)
+                            },
+                            success: function () {
+                              //  alert('Thanks for your comment!');
+                            },
+                            error: function () {
+
+                            }
+                        });
+
+            }
+
+            setInterval(checkTail, 1000);
+
+        </script>
+
+    </head>
+    <body>
+        <div id="log">
+            
+        </div>
+    </body>
+</html>

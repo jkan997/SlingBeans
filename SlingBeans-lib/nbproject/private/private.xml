@@ -11,6 +11,17 @@
         <group name="VISA"/>
         <group name="GeoSpatial AEM"/>
         <group name="MotorolaTraining"/>
-        <group name="SlingBeans"/>
+        <group name="SR Dashboard">
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/slingfs/FileSystem.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/InstallRemoteLog.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/test/SRDashboard.java</file>
+        </group>
+        <group name="SlingBeans">
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/slingfs/FileObject.java</file>
+        </group>
+        <group name="INDD">
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/logger.html</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-lib/src/org/jkan997/slingbeans/dialogs/OpenLogViewerDialog.java</file>
+        </group>
     </open-files>
 </project-private>

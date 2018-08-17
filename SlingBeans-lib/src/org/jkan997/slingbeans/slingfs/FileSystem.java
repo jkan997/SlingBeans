@@ -151,9 +151,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
     }
 
     public WorkflowSet readWorkflows() {
-        FileObject workflowRootFo = this.getFileObject("etc/workflow/models", 10);
         workflows = new WorkflowSet();
-        workflows.init(workflowRootFo);
+        workflows.init(this);
+        
+        
         return workflows;
 
     }
@@ -378,6 +379,10 @@ public class FileSystem extends org.openide.filesystems.FileSystem implements Di
             LogHelper.logError(ex);
         }
         return null;
+    }
+    
+    public byte[] sendGet(String url) {
+        return sendGet(url, Collections.EMPTY_MAP, true);
     }
 
     public byte[] sendGet(String url, Map<String, String> params) {

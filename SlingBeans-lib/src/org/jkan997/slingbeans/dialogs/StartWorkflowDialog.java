@@ -4,7 +4,6 @@
  * Licensed under Apache 2.0 license
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-
 package org.jkan997.slingbeans.dialogs;
 
 import ca.odell.glazedlists.GlazedLists;
@@ -35,7 +34,7 @@ public class StartWorkflowDialog extends javax.swing.JDialog {
 
     }
 
-    public void init(Set workflows,String payload) {
+    public void init(Set workflows, String payload) {
         comboBoxSet = new ComboBoxSet(workflows, true) {
             @Override
             protected String convertToString(Object o) {
@@ -57,7 +56,7 @@ public class StartWorkflowDialog extends javax.swing.JDialog {
             workflowConfiguration.setWorkflowTitle("Workflow title");
             workflowConfiguration.setWorkfloadComment("Workflow comment");
         }
-        if (payload!=null){
+        if (payload != null) {
             workflowConfiguration.setWorkflowPayload(payload);
         }
         workflowCombo.setSelectedItem(workflowConfiguration.getWorkfloadName());
@@ -73,8 +72,6 @@ public class StartWorkflowDialog extends javax.swing.JDialog {
     public WorkflowConfiguration getWorkflowConfiguration() {
         return workflowConfiguration;
     }
-
-    
 
     public String getSelectedNodeType() {
         Object selected = workflowCombo.getSelectedItem();
@@ -231,17 +228,17 @@ public class StartWorkflowDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void startBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startBtnActionPerformed
-        
+
         Configuration configuration = ConfigurationImpl.getInstance();
         Workflow workflow = (Workflow) comboBoxSet.getByLabel(workflowCombo.getSelectedItem().toString());
-        if (workflow!=null){
-        workflowConfiguration.setWorkfloadName(workflow.getName());
-        workflowConfiguration.setWorkfloadPath(workflow.getPath());
-        workflowConfiguration.setWorkflowPayload(workflowPayloadText.getText());
-        workflowConfiguration.setWorkflowTitle(workflowTitleText.getText());
-        workflowConfiguration.setWorkfloadComment(workflowDescriptionText.getText());
-        startWorkflow = true;
-        configuration.setObject(WorkflowConfiguration.WORKFLOW_CONFIGURATION, workflowConfiguration);
+        if (workflow != null) {
+            workflowConfiguration.setWorkfloadName(workflow.getName());
+            workflowConfiguration.setWorkfloadPath(workflow.getPath());
+            workflowConfiguration.setWorkflowPayload(workflowPayloadText.getText());
+            workflowConfiguration.setWorkflowTitle(workflowTitleText.getText());
+            workflowConfiguration.setWorkfloadComment(workflowDescriptionText.getText());
+            startWorkflow = true;
+            configuration.setObject(WorkflowConfiguration.WORKFLOW_CONFIGURATION, workflowConfiguration);
         }
         this.setVisible(false);
 

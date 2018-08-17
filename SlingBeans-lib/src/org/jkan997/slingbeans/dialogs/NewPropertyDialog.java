@@ -6,7 +6,10 @@
  */
 package org.jkan997.slingbeans.dialogs;
 
+import java.awt.event.KeyEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import org.jkan997.slingbeans.helper.PropertyType;
 
 public class NewPropertyDialog extends javax.swing.JDialog {
@@ -54,6 +57,13 @@ public class NewPropertyDialog extends javax.swing.JDialog {
         jLabel2.setText(org.openide.util.NbBundle.getMessage(NewPropertyDialog.class, "NewPropertyDialog.jLabel2.text")); // NOI18N
 
         cancelBtn.setText(org.openide.util.NbBundle.getMessage(NewPropertyDialog.class, "NewPropertyDialog.cancelBtn.text")); // NOI18N
+        cancelBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    cancelBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         cancelBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelBtnActionPerformed(evt);
@@ -61,6 +71,13 @@ public class NewPropertyDialog extends javax.swing.JDialog {
         });
 
         addBtn.setText(org.openide.util.NbBundle.getMessage(NewPropertyDialog.class, "NewPropertyDialog.addBtn.text")); // NOI18N
+        addBtn.registerKeyboardAction(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    addBtnActionPerformed(evt);
+                }
+            }
+            , KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         addBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addBtnActionPerformed(evt);
