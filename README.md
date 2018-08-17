@@ -19,6 +19,17 @@ Main features:
 
 ![screen shot 2015-05-23 at 01 37 12](https://cloud.githubusercontent.com/assets/2896358/7781298/6b6fcfea-00ec-11e5-90d2-71ea33f4464d.png)
 
+AEM Multimodule Project in SlingBeans
+----------
+To use AMC archetype in NetBeans you have just to install it in local repo
+
+```sh
+git clone https://github.com/Adobe-Marketing-Cloud/aem-project-archetype.git aem-project-archetype
+cd aem-project-archetype
+mvn install
+```
+
+
 Changelog
 ----------
 Version 1.1 (2016-01-29)
