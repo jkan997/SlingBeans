@@ -10,6 +10,8 @@ package org.jkan997.slingbeans.nbactions;
 import java.io.IOException;
 import java.io.Writer;
 import static javax.swing.Action.NAME;
+import org.jkan997.slingbeans.nbprojects.maven.LocalSlingNode;
+import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.openide.windows.IOProvider;
 import org.openide.windows.InputOutput;
 
@@ -21,6 +23,8 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 
     protected String name;
     private Writer logWriter = null;
+    protected LocalSlingNode localNode;
+
 
     public void setActionName(String val) {
         this.name = val;
@@ -29,6 +33,19 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
 
     public String getActionName() {
         return name;
+    }
+
+    public LocalSlingNode getLocalNode() {
+        return localNode;
+    }
+
+    public void setLocalNode(LocalSlingNode localNode) {
+        this.localNode = localNode;
+    }
+    
+    
+    private SlingNode getSlingNode() {
+        return null;
     }
 
     protected Writer getOutputWriter() {
@@ -46,6 +63,7 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
         }
         return logWriter;
     }
+    
 
     protected void logInfo(String msg, Object... params) {
         Writer logWriter = getOutputWriter();
@@ -56,6 +74,8 @@ public abstract class AbstractAction extends javax.swing.AbstractAction {
         } catch (IOException iOException) {
         }
     }
+    
+    
 
     protected void logHeader(String msg, Object... params) {
         Writer logWriter = getOutputWriter();

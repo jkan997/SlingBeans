@@ -6,10 +6,11 @@ package org.jkan997.slingbeans.nbactions;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.net.URI;
+import java.net.URL;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.nbtree.SlingNode;
 import org.jkan997.slingbeans.slingfs.FileObject;
-import org.openide.awt.HtmlBrowser.URLDisplayer;
+import org.openide.awt.HtmlBrowser;
 
 public class OpenBrowserAction extends AbstractAction {
 
@@ -20,6 +21,7 @@ public class OpenBrowserAction extends AbstractAction {
 
     public int openBrowserMode = OPEN_BROWSER_MODE_CRXDE;
     private final FileObject fileObject;
+    protected boolean useUrlDisplayer = true;
 
     public OpenBrowserAction(SlingNode node) {
         if (node != null) {
@@ -33,6 +35,18 @@ public class OpenBrowserAction extends AbstractAction {
         this.fileObject = fileObject;
     }
 
+    public boolean isUseUrlDisplayer() {
+        return useUrlDisplayer;
+    }
+
+    public void setUseUrlDisplayer(boolean useUrlDisplayer) {
+        this.useUrlDisplayer = useUrlDisplayer;
+    }
+    
+    protected void openInBrowser(String url){
+        
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
@@ -42,13 +56,18 @@ public class OpenBrowserAction extends AbstractAction {
                 urlSb.append("/crx/de/index.jsp#/" + fileObject.getPath());
             } else if (openBrowserMode == OPEN_BROWSER_MODE_WF_CONSOLE) {
                 urlSb.append("/workflow");
-            }else if (openBrowserMode == OPEN_BROWSER_MODE_SYSTEM_CONSOLE) {
+            } else if (openBrowserMode == OPEN_BROWSER_MODE_SYSTEM_CONSOLE) {
                 urlSb.append("/system/console/configMgr");
-            }  else {
+            } else {
                 urlSb.append("/" + fileObject.getPath() + ".html");
             }
+            if (useUrlDisplayer){
+                HtmlBrowser.URLDisplayer.getDefault().showURL(new URL(urlSb.toString()));
+            } else {
             Desktop desktop = Desktop.getDesktop();
             desktop.browse(new URI(urlSb.toString()));
+            }
+        
         } catch (Exception ex) {
             LogHelper.logError(ex);
         }

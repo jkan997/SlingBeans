@@ -15,7 +15,6 @@ import org.jkan997.slingbeans.nbservices.SlingFsFactory;
 import org.jkan997.slingbeans.slingfs.FileSystem;
 import org.jkan997.slingbeans.slingfs.local.LocalFileObject;
 import org.jkan997.slingbeans.slingfs.local.LocalFileSystem;
-import org.jkan997.slingbeans.vlt.VltManager;
 import org.openide.filesystems.FileAttributeEvent;
 import org.openide.filesystems.FileChangeListener;
 import org.openide.filesystems.FileEvent;
@@ -32,6 +31,7 @@ import org.openide.windows.InputOutput;
 public class ContentChangeListener implements FileChangeListener {
 
     public static Map<String, ContentChangeListener> listeners = new HashMap<String, ContentChangeListener>();
+    public static boolean DISABLED = false;
 
     public static void createListener(String contentPath, LocalSlingRootNode rootNode) {
 
@@ -100,7 +100,7 @@ public class ContentChangeListener implements FileChangeListener {
 
         try {
             Writer wrt = getOutputWriter();
-            wrt.write("File changed: " + lfo.getFilePath() + "\n");
+            wrt.write("File changed: " + lfo.getFilePath() + (ContentChangeListener.DISABLED ? " (listener disabled) " : "") + "\n");
 
             SlingFsFactory slingFsFactory = SlingFsFactory.lookup();
             String fsId = slingFsFactory.getDefualtFileSystemId();

@@ -13,6 +13,7 @@ import org.jkan997.slingbeans.nbactions.OpenCrxDeAction;
 import org.jkan997.slingbeans.nbactions.OpenHtmlAction;
 import org.jkan997.slingbeans.nbactions.OpenLogViewerAction;
 import org.jkan997.slingbeans.nbactions.ReplicateAction;
+import org.jkan997.slingbeans.nbactions.ReplicateRecursiveAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowAction;
 import org.jkan997.slingbeans.nbactions.StartWorkflowWithDialogAction;
 import org.jkan997.slingbeans.nbtree.SlingNode;
@@ -40,50 +41,52 @@ public class CQ5Submenu extends AbstractSubmenu {
         actions = new ArrayList<AbstractAction>();
         if (node instanceof SlingNode) {
             SlingNode slingNode = (SlingNode) node;
-            fileObject = slingNode.getFileObject();
-            /*
-             if (fileObject.getExt().equals("bnd")) {
-             BuildBundleAction buildBundleAction = new BuildBundleAction(null);
-             buildBundleAction.setSlingNode(slingNode);
-             addAction(buildBundleAction);
-             }*/
+
             if (aemMode) {
                 ReplicateAction replicateAction = new ReplicateAction(slingNode);
+                ReplicateRecursiveAction replicateRecursiveAction = new ReplicateRecursiveAction(slingNode);
+
+                // replicateAction.setLocalNode(localNode);
                 OpenCrxDeAction openCrxDeAction = new OpenCrxDeAction(slingNode);
+                // openCrxDeAction.setLocalNode(localNode);
+                addAction(replicateRecursiveAction);
                 addAction(replicateAction);
                 addAction(openCrxDeAction);
             }
             OpenHtmlAction openHtmlAction = new OpenHtmlAction(slingNode);
+            //         OpenHtmlAction openHtmlAction = new OpenHtmlAction(slingNode);
+
+            //openHtmlAction.setLocalNode(localNode);
             addAction(openHtmlAction);
 
-        }
-        if (fileObject != null) {
-            try {
-                OpenLogViewerAction openLogAction = new OpenLogViewerAction(fileObject.getFileSystem());
-                actions.add(openLogAction);
-            } catch (Exception ex) {
-                LogHelper.logError(ex);
+            if (fileObject != null) {
+                try {
+                    OpenLogViewerAction openLogAction = new OpenLogViewerAction(slingNode);
+                    //   openLogAction.setLocalNode(localNode);
+                    actions.add(openLogAction);
+                } catch (Exception ex) {
+                    LogHelper.logError(ex);
+                }
+
             }
+            if (aemMode) {
+                StartWorkflowAction swaAction = new StartWorkflowAction(null);
+                StartWorkflowWithDialogAction swwdAction = new StartWorkflowWithDialogAction(null);
+                swaAction.setFileObject(fileObject);
+                swwdAction.setFileObject(fileObject);
+                addAction(swaAction);
+                addAction(swwdAction);
+                OpenBrowserAction openWfConsoleAction = new OpenBrowserAction(fileObject);
+                openWfConsoleAction.setActionName("Open Workflow Console");
+                openWfConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_WF_CONSOLE;
+                addAction(openWfConsoleAction);
 
+                OpenBrowserAction openSystemConsoleAction = new OpenBrowserAction(fileObject);
+                openSystemConsoleAction.setActionName("Open System Console");
+                openSystemConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_SYSTEM_CONSOLE;
+                addAction(openSystemConsoleAction);
+            }
         }
-        if (aemMode) {
-            StartWorkflowAction swaAction = new StartWorkflowAction(null);
-            StartWorkflowWithDialogAction swwdAction = new StartWorkflowWithDialogAction(null);
-            swaAction.setFileObject(fileObject);
-            swwdAction.setFileObject(fileObject);
-            addAction(swaAction);
-            addAction(swwdAction);
-            OpenBrowserAction openWfConsoleAction = new OpenBrowserAction(fileObject);
-            openWfConsoleAction.setActionName("Open Workflow Console");
-            openWfConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_WF_CONSOLE;
-            addAction(openWfConsoleAction);
-            
-            OpenBrowserAction openSystemConsoleAction = new OpenBrowserAction(fileObject);
-            openSystemConsoleAction.setActionName("Open System Console");
-            openSystemConsoleAction.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_SYSTEM_CONSOLE;
-            addAction(openSystemConsoleAction);
-        }
-
     }
 
     public CQ5Submenu() {

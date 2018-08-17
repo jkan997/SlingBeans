@@ -13,8 +13,13 @@
         <group name="VISA"/>
         <group name="GeoSpatial AEM"/>
         <group name="MotorolaTraining"/>
+        <group name="ShareMap"/>
+        <group name="ALDI"/>
         <group name="SlingBeans">
-            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbprojects/maven/ContentChangeListener.java</file>
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nbtree/SlingTreeTopComponent.java</file>
+        </group>
+        <group name="INDD">
+            <file>file:/Users/jakaniew/git/Private/SlingBeans/SlingBeans-nb/src/org/jkan997/slingbeans/nblogviewer/LogViewer.java</file>
         </group>
     </open-files>
 </project-private>

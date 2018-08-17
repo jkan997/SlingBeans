@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.jkan997.slingbeans.helper.LogHelper;
 import org.jkan997.slingbeans.helper.NbNodeHelper;
 import org.jkan997.slingbeans.helper.SwingHelper;
+import org.jkan997.slingbeans.nbprojects.maven.ContentChangeListener;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingNode;
 import org.jkan997.slingbeans.nbprojects.maven.LocalSlingRootNode;
 import org.jkan997.slingbeans.nbprojects.maven.MavenProjectUtils;
@@ -48,6 +49,7 @@ public abstract class VltAction extends AbstractAction {
 
     private void runAction() {
         LogHelper.logInfo(this, "Action %s", this.getClass().getName());
+        ContentChangeListener.DISABLED = true;
         try {
             SlingFsFactory slingFsFactory = SlingFsFactory.lookup();
             String fsId = slingFsFactory.getDefualtFileSystemId();
@@ -112,6 +114,9 @@ public abstract class VltAction extends AbstractAction {
             }
         } catch (Exception ex) {
             LogHelper.logError(ex);
+        } finally {
+            ContentChangeListener.DISABLED = false;
+
         }
     }
 }

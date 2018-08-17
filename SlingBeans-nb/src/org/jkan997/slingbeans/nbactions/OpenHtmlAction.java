@@ -15,5 +15,6 @@ public class OpenHtmlAction extends OpenBrowserAction {
         super(node);
         this.openBrowserMode = OpenBrowserAction.OPEN_BROWSER_MODE_HTML;
         this.setActionName("Open as HTML page");
+        this.setUseUrlDisplayer(true);
     }
 }

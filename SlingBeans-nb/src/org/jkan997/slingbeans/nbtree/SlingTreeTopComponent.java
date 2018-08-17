@@ -288,6 +288,15 @@ public final class SlingTreeTopComponent extends TopComponent implements Explore
         //selectedSlingNode.refresh();
     }//GEN-LAST:event_gotoBtnActionPerformed
 
+    public SlingRootNode getRootNode(){
+        if (mgr==null){
+            return null;
+        }
+        return (SlingRootNode)mgr.getRootContext();
+    }
+    
+    
+    
     public void refreshPath(String path) {
         path = StringHelper.normalizePath(path);
         String[] pathArr = path.split("/");

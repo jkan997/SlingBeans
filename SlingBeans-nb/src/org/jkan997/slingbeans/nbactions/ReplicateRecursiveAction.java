@@ -19,15 +19,14 @@ import org.openide.awt.ActionRegistration;
 
 @ActionID(
         category = "SlingFs",
-        id = "org.jkan997.slingbeans.nbactions.ReplicateAction")
-@ActionRegistration(asynchronous = true, displayName = "Replicate")
-public class ReplicateAction extends AbstractAction {
+        id = "org.jkan997.slingbeans.nbactions.ReplicateRecursiveAction")
+@ActionRegistration(asynchronous = true, displayName = "Replicate recursive")
+public class ReplicateRecursiveAction extends AbstractAction {
 
     private SlingNode node;
 
-  
-    public ReplicateAction(SlingNode node) {
-        setActionName("Replicate");
+    public ReplicateRecursiveAction(SlingNode node) {
+        setActionName("Replicate recursive");
         this.node = node;
     }
 
@@ -43,7 +42,7 @@ public class ReplicateAction extends AbstractAction {
                 }
             }
         };
-        ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, "Replicating node", new AtomicBoolean(false), false);
+        ProgressUtils.runOffEventDispatchThread(loadWorkflowsTask, "Replicating node recursive", new AtomicBoolean(false), false);
     }
 
     private void replicateNode() {
@@ -52,18 +51,16 @@ public class ReplicateAction extends AbstractAction {
             FileSystem fs = fo.getFileSystem();
             logInfo("Node path: %s", fo.getPath());
             Map<String, String> params = new TreeMap<String, String>();
-            params.put("action", "replicate");
+            params.put("_charset_", "UTF-8");
             params.put("path", "/" + fo.getPath());
-            fs.sendSimplePost("/crx/de/replication.jsp", params);
-            Thread.sleep(1000);
-            params.remove("action");
-            params.put("path", "/" + fo.getPath());
+            params.put("ignoredeactivated", "true");
+            params.put("cmd", "activate");
             byte[] res = null;
-            res = fs.sendGet("/crx/de/replication.jsp", params);
+            res = fs.sendSimplePost("/etc/replication/treeactivation.html", params);
             String buildLog = new String(res);
             buildLog = buildLog.replace("{", "{\n");
             buildLog = buildLog.replace(",\"", ",\n\"");
-            logHeader("REPLICATING NODE");
+            logHeader("REPLICATING NODE RECURSIVE");
             logInfo(buildLog);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

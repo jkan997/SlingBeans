@@ -31,12 +31,6 @@ public class StartWorkflowAction extends AbstractAction {
 
     public StartWorkflowAction(DataObject context) {
         setActionName("Start workflow");
-        /*  if (context!=null){
-         org.openide.filesystems.FileObject fo = context.getPrimaryFile();
-         File f = Utilities.toFile(fo.toURI());
-         File syncedFolder = SyncDescriptor.findSyncDescriptor(f);
-         this.setFileObject(syncedFolder);
-         }*/
     }
 
     public FileObject getFileObject() {

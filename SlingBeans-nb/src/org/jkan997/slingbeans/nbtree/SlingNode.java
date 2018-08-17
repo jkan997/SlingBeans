@@ -92,8 +92,8 @@ public class SlingNode extends AbstractNode {
                 actions.add(openEditorAction);
             }
             try {
-                boolean aemMode = this.getFileObject().getFileSystem().isCQ5();
-                CQ5Submenu cq5Submenu = new CQ5Submenu(this, aemMode);
+                boolean aemMode = fileObject.getFileSystem().isCQ5();
+                CQ5Submenu cq5Submenu = new CQ5Submenu(this, fileObject,aemMode);
                 actions.add(cq5Submenu);
             } catch (FileStateInvalidException ex) {
                 LogHelper.logError(ex);
