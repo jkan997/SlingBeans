@@ -1,8 +1,9 @@
 SlingBeans
 ----------
-SlingBeans is a plugin for NetBeans IDE (versions from 8 up to 12 and newer) for AEM and Sling developers.
+SlingBeans is a plugin for NetBeans IDE (versions from 8 up to 19 and newer) for AEM and Sling developers.
 
-Download beta NBM (NetBeans plugin) file for testing [HERE](https://github.com/jkan997/SlingBeans/blob/master/dist/org-jkan997-slingbeans.nbm?raw=true) . For old version of NetBeans you have to download older file and build the plugin yourself. The plugin requires JDK >= 8.
+Download beta NBM (NetBeans plugin) file for testing [HERE](https://github.com/jkan997/SlingBeans/blob/master/dist/org-jkan997-slingbeans.nbm?raw=true) . 
+For old version of NetBeans you have to download older file and build the plugin yourself. The plugin requires JDK >= 8.
 
 * Watch screencast on SlingBeans installation - [HERE](http://youtu.be/uZPBTn3Ho7E)
 * Watch screencast about editing remote AEM repository with SlingBeans - [HERE](https://youtu.be/8X9r-6w2FM4)
